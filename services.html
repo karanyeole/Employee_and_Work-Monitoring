@@ -1,0 +1,93 @@
+<div id="header-placeholder"></div>
+  <!-- Services-->
+  <section id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-5">
+          <span class="mainheading">Services</span>
+          <span class="subheading">Checkout the services</span>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-webcam-fill"></i><br>Employee Attendance Tracking</h3>
+            <p>Automate attendance records with precise facial recognition technology and ensure accuracy and reduce administrative workload with our seamless solution.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-building-lock"></i><br>Access Control Management</h3>
+            <p>Secure your workplace with our advanced access control services. Allow only authorized personnel to enter restricted areas, enhancing security and compliance.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-motherboard-fill"></i><br>Real-Time Activity Monitoring</h3>
+            <p>Keep an eye on employee activities throughout the day. Monitor workstation usage and adherence to schedules in real-time.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-exclamation-triangle-fill"></i><br>Alert & Notification Systems</h3>
+            <p> Stay informed with our instant alert services. Receive notifications for unauthorized access, absenteeism, and other critical events.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-intersect"></i><br>System Integration
+            </h3>
+            <p>Seamlessly integrate our work monitoring system with your existing HR and payroll systems. Simplify processes and enhance workflow efficiency.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="service-card">
+            <span>
+            <h3><i class="bi bi-optical-audio-fill"></i><br>Productivity Optimization</h3>
+            <p>Leverage data-driven insights to boost workplace efficiency. Identify patterns, reduce idle time, and enhance overall productivity.</p>
+            <a href="#">Read More</a>
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- End Services-->
+
+
+<div id="footer-placeholder"></div>
+
+<script>
+    fetch("top.html")
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+  <script>
+    fetch("bottom.html")
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById("footer-placeholder").innerHTML = data;
+      });
+  </script>

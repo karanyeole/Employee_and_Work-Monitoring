@@ -1,0 +1,104 @@
+<div id="header-placeholder"></div>
+
+        <!-- FAQs-->
+        <section id="faq" class="faq">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12 mb-5 text-center">
+                  <span class="mainheading">FAQs</span>
+                  <span class="subheading">Frequently Asked Questions</span>
+                </div>
+                
+                <!-- FAQ 1 -->
+                <div class="col-md-4">
+                  <img src="potrait/CW_TW_What-Is-Employee-Monitoring.webp" class="img-fluid" alt="Face Recognition for Employee Monitoring">
+                </div>
+                <div class="col-md-8">
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          How does the face recognition system work for employee monitoring?
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>The face recognition system</strong> works by capturing images of employees as they enter the workplace and comparing these images to stored templates in the database. The system uses advanced algorithms to map facial features and match them against the stored data to identify individuals accurately. Once identified, the system logs the employee's entry time, and this data is used to monitor attendance, work hours, and overall productivity.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- FAQ 2 -->
+                <div class="col-md-4 mt-5">
+                  <img src="potrait/images 2.png" class="img-fluid" alt="Face Recognition System Issues">
+                </div>
+                <div class="col-md-8 mt-5">
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          What should I do if the face recognition system fails to recognize me?
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>If the face recognition system fails to recognize you,</strong> please ensure that your face is clearly visible to the camera, with no obstructions such as hats or sunglasses. If the issue persists, you can try the following steps:
+                          <ul>
+                            <li>Adjust the lighting in your environment to reduce shadows or glare.</li>
+                            <li>Stand still and face the camera directly.</li>
+                            <li>Ensure that your face is within the camera's frame and at an appropriate distance.</li>
+                            <li>If none of these steps resolve the issue, please contact support for further assistance.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- FAQ 3 -->
+                <div class="col-md-4 mt-5">
+                  <img src="potrait/image 3.jpg" class="img-fluid" alt="Data Security in Face Recognition">
+                </div>
+                <div class="col-md-8 mt-5">
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          How is my data secured in the face recognition system?
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <strong>Data security</strong> is a top priority in our face recognition system. All facial data is encrypted both in transit and at rest, ensuring that it cannot be accessed by unauthorized individuals. Access to the system is restricted to authorized personnel only, and all data processing complies with relevant data protection regulations. Additionally, regular security audits are conducted to identify and mitigate any potential vulnerabilities.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </section>
+          <!-- End FAQs -->
+
+
+
+
+<div id="footer-placeholder"></div>
+
+<script>
+    fetch("top.html")
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+  <script>
+    fetch("bottom.html")
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById("footer-placeholder").innerHTML = data;
+      });
+  </script>
