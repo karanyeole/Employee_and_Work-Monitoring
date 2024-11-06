@@ -95,19 +95,4 @@
 
 
 <div id="footer-placeholder"></div>
-
-<script>
-    fetch("top.html")
-      .then(response => response.text())
-      .then(data => {
-          document.getElementById("header-placeholder").innerHTML = data;
-      });
-  </script>
-  <script>
-    fetch("bottom.html")
-      .then(response => response.text())
-      .then(data => {
-          document.getElementById("footer-placeholder").innerHTML = data;
-      });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
