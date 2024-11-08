@@ -13,9 +13,6 @@
     padding: 0px 10px; /* Increased padding for better spacing */
 }
 
-.nav-item:hover {
-    /* background-color: bisque; */
-}
 
 .nav-item:hover .nav-link {
     color: #fa7122;
@@ -124,20 +121,22 @@
 }
 
 .bg1 {
-    background: linear-gradient(rgba(232, 204, 204, 0.126), rgba(0, 0, 0, 0.7)), url("slider/11-Ways-Employee-Monitoring-Tools-Improve-Employee-Productivity-and-Efficiency.webp");
+    background: linear-gradient(rgba(232, 204, 204, 0.126), rgba(0, 0, 0, 0.7)), url("/static/images/slider/11-Ways-Employee-Monitoring-Tools-Improve-Employee-Productivity-and-Efficiency.webp");
 }
 
 .bg2 {
-    background: linear-gradient(rgb(232, 204, 204), rgba(0, 0, 0, 0.7)), url("slider/employee-monitoring-system.png");
+    background: linear-gradient(rgba(232, 204, 204, 0.126), rgba(0, 0, 0, 0.7)), url("/static/images/slider/employee-monitoring-system.png");
 }
 
 .bg3 {
-    background: linear-gradient(rgb(232, 204, 204), rgba(0, 0, 0, 0.7)), url("slider/Employee-Tracking-and-Monitoring-Improving-Emergency-Drills-3.gif");
+    background: linear-gradient(rgba(232, 204, 204, 0.126), rgba(0, 0, 0, 0.7)), url("/static/images/slider/Employee-Tracking-and-Monitoring-Improving-Emergency-Drills-3.gif");
 }
 
 .bg4 {
-    background: linear-gradient(rgba(232, 204, 204, 0.826), rgba(0, 0, 0, 0.7)), url("slider/Tracing.gif");
+    background: linear-gradient(rgba(232, 204, 204, 0.126), rgba(0, 0, 0, 0.7)), url("/static/images/slider/Tracing.gif");
 }
+
+
 
 .mycaption {
     color: #ffffff; /* White text */
