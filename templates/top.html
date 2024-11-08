@@ -31,7 +31,7 @@
                   <a class="nav-link" href="{{ url_for('gallary') }}">Gallery</a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('services') }}">Services</a>
+                  <a class="nav-link" href="{{ url_for('services') }}" id="services-link">Services</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('index') }}#contact">Contact</a>
@@ -88,7 +88,7 @@
                       </form>
                   </div>
                   <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
-                      <form>
+                      <form id="empinfo">
                           <div class="mb-3">
                               <label for="existingEmployeeEmail" class="form-label">Email</label>
                               <input type="email" class="form-control" id="existingEmployeeEmail" required>
@@ -123,7 +123,7 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="hrRegister" role="tabpanel" aria-labelledby="hrRegister-tab">
-                        <form id="hrinfo">
+                        <form id="hrinfo" >
                             <div class="mb-3">
                                 <label for="hrName" class="form-label">Full Name</label>
                                 <input type="text" class="form-control" id="hrName" required>

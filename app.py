@@ -17,5 +17,12 @@ def gallary():
 def services():
     return render_template('services.html')
 
+@app.route('/hr_services')
+def hr_services():
+    return render_template("hr_services.html")
+
+@app.route('/emp_services')
+def emp_services():
+    return render_template("emp_services.html")
 if __name__=="__main__":
     app.run(debug=True)

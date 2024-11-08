@@ -529,3 +529,30 @@ section {
 .copyright{
     background-color:#030331 ;
 }
+
+
+
+/*hr services*/
+
+.card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+}
+.card-title {
+    font-weight: bold;
+    color: #343a40;
+}
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
+/*end hr services*/
