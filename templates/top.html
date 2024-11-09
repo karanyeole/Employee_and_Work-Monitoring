@@ -32,6 +32,8 @@
               </li>
               <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('services') }}" id="services-link">Services</a>
+                  <a class="nav-link" href="{{ url_for('hr_services') }}" id="services-link-hr" >Services</a>
+                  <a class="nav-link" href="{{ url_for('hr_services') }}" id="services-link-emp" >Services</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('index') }}#contact">Contact</a>
@@ -45,6 +47,10 @@
                       <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#hrSignupModal">Signup as HR</a></li>
                   </ul>
               </li>
+              <!-- Logout Button (Initially hidden) -->
+              <li class="nav-item" id="logout-item" style="display: none;">
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </li>
           </ul>
       </div>
   </div>
