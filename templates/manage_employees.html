@@ -1,0 +1,114 @@
+{% include 'top.html' %}
+
+<!-- Container with padding-top to avoid overlap with fixed navbar -->
+<div class="container" style="padding-top: 80px;">
+    {% if not employee %}
+        <h1 class="text-center mb-4">Manage Employee Details</h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success">{{ messages[0] }}</div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Check if there are no employees -->
+        {% if not employees %}
+        <div class="alert alert-warning text-center">
+            No employees available. Please add employees to manage.
+        </div>
+        {% else %}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Job Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee[0] }}</td>
+                    <td>{{ employee[1] }}</td>
+                    <td>{{ employee[2] }}</td>
+                    <td>{{ employee[5] }}</td>
+                    <td>{{ employee[6] }}</td>
+                    <td>{{ employee[9] }}</td>
+                    <td>{{ employee[8] }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_employee', employee_id=employee[0]) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ url_for('delete_employee', employee_id=employee[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% else %}
+        <h1 class="mb-4">Edit Employee Details</h1>
+        <form action="{{ url_for('edit_employee', employee_id=employee[0]) }}" method="POST">
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ employee[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ employee[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" value="{{ employee[3] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" name="gender" required>
+                    <option value="Male" {% if employee[4] == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if employee[4] == 'Female' %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if employee[4] == 'Other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ employee[5] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" class="form-control" id="phone" name="phone" value="{{ employee[6] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" name="address" rows="3" required>{{ employee[7] }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="job_title">Job Title</label>
+                <input type="text" class="form-control" id="job_title" name="job_title" value="{{ employee[8] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="department">Department</label>
+                <input type="text" class="form-control" id="department" name="department" value="{{ employee[9] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="salary">Salary</label>
+                <input type="number" class="form-control" id="salary" name="salary" value="{{ employee[10] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="emergency_contact_name">Emergency Contact Name</label>
+                <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name" value="{{ employee[11] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                <input type="tel" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" value="{{ employee[12] }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Update Employee</button>
+        </form>
+    {% endif %}
+</div>
+
+{% include 'bottom.html' %}

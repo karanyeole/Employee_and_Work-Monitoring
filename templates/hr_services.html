@@ -12,24 +12,24 @@
     </div>
 </section>
 
-<!-- Leave Requests Section -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Leave Requests</h3>
-        <p class="card-text">Apply for leave request.</p>
-        <a href=# class="btn btn-primary">Request Leave</a>
-    </div>
-</section>
 
 <!-- Manage Employee Details -->
 <section class="card">
     <div class="card-body">
         <h3 class="card-title">Manage Employee Details</h3>
         <p class="card-text">Edit, view, or delete employee records.</p>
-        <a href="#" class="btn btn-primary">Manage Employees</a>
+        <a href="{{ url_for('manage_employees') }}" class="btn btn-primary">Manage Employees</a>
     </div>
 </section>
 
+<!-- Leave Requests Section -->
+<section class="card">
+    <div class="card-body">
+        <h3 class="card-title">Leave Requests</h3>
+        <p class="card-text">View applied leave requests.</p>
+        <a href=# class="btn btn-primary">Request Leave</a>
+    </div>
+</section>
 
 
 <!-- Total Working Hours Section -->

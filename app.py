@@ -57,6 +57,10 @@ def services():
 def hr_services():
     return render_template("hr_services.html")
 
+@app.route('/emp_services')
+def emp_services():
+    return render_template("emp_services.html")
+
 from flask import jsonify, request, render_template, redirect, flash
 
 @app.route('/add_employee', methods=['GET', 'POST'])
@@ -115,7 +119,7 @@ def leave_request():
         # Process or save `leave_data` as needed
 
         flash("Leave request submitted successfully!")
-        return redirect(url_for("hr_services.html"))
+        return redirect(url_for("emp_services.html"))
 
     return render_template("leave_request.html")
 
@@ -132,7 +136,68 @@ def capture_images():
         result = capture(str(r))  # Call the capture_image function with the user's name.
         flash(result)  # Flash the result to the user
         return redirect('/hr_services')  # Redirect to the page after the image capture
+    
 
+
+# Route to display the list of employees
+@app.route('/manage_employees', methods=['GET'])
+def manage_employees():
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM employees")
+    employees = cursor.fetchall()
+    conn.close()
+    return render_template("manage_employees.html", employees=employees)
+
+# Route to edit an employee's details
+@app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
+def edit_employee(employee_id):
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        # Collect form data
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        dob = request.form['dob']
+        gender = request.form['gender']
+        email = request.form['email']
+        phone = request.form['phone']
+        address = request.form['address']
+        job_title = request.form['job_title']
+        department = request.form['department']
+        salary = request.form['salary']
+        emergency_contact_name = request.form['emergency_contact_name']
+        emergency_contact_phone = request.form['emergency_contact_phone']
+        
+        # Update employee in the database
+        cursor.execute('''
+            UPDATE employees SET first_name=?, last_name=?, dob=?, gender=?, email=?, phone=?, 
+            address=?, job_title=?, department=?, salary=?, emergency_contact_name=?, 
+            emergency_contact_phone=? WHERE id=?
+        ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary, emergency_contact_name, emergency_contact_phone, employee_id))
+        conn.commit()
+        conn.close()
+        flash("Employee details updated successfully!")
+        return redirect(url_for('manage_employees'))
+    
+    # Fetch current employee data to populate the form
+    cursor.execute("SELECT * FROM employees WHERE id=?", (employee_id,))
+    employee = cursor.fetchone()
+    conn.close()
+    return render_template("manage_employees.html", employee=employee)
+
+
+# Route to delete an employee's details
+@app.route('/delete_employee/<int:employee_id>', methods=['POST'])
+def delete_employee(employee_id):
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM employees WHERE id=?", (employee_id,))
+    conn.commit()
+    conn.close()
+    flash("Employee deleted successfully!")
+    return redirect(url_for('manage_employees'))
 
 if __name__ == "__main__":
     app.run(debug=True)
