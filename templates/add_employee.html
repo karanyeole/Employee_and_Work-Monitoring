@@ -2,6 +2,8 @@
 
 <div class="container">
     <h1 class="mb-4">Add New Employee</h1>
+
+    <!-- Add Employee Form -->
     <form action="{{ url_for('add_employee') }}" method="POST" data-url="{{ url_for('add_employee') }}">
         <!-- Personal Information -->
         <h3>Personal Information</h3>
@@ -67,12 +69,14 @@
             <label for="emergency_contact_phone">Contact Phone</label>
             <input type="tel" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" required>
         </div>
+        
+        <!-- Submit Button for Adding Employee -->
         <button type="submit" class="btn btn-primary mt-4">Add Employee</button>
     </form>
 
-    
-    <form method="POST" action="{{ url_for('capture_images') }}">
-        <button type="submit">OK</button>
+    <!-- Separate Form for Capture Images Button -->
+    <form method="POST" action="{{ url_for('capture_images') }}" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-secondary">Capture Images</button>
     </form>
 
 </div>

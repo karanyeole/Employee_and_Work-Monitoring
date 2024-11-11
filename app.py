@@ -57,6 +57,8 @@ def services():
 def hr_services():
     return render_template("hr_services.html")
 
+from flask import jsonify, request, render_template, redirect, flash
+
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
     if request.method == 'POST':
@@ -73,26 +75,29 @@ def add_employee():
         salary = request.form['salary']
         emergency_contact_name = request.form['emergency_contact_name']
         emergency_contact_phone = request.form['emergency_contact_phone']
+        
+        # Connect to the database
         conn = sqlite3.connect('employees.db')
-        name = first_name
-        name1 =last_name
         cursor = conn.cursor()
+        
+        # Insert the new employee
         cursor.execute('''
             INSERT INTO employees (
                 first_name, last_name, dob, gender, email, phone, address,
                 job_title, department, salary, emergency_contact_name, emergency_contact_phone
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary, emergency_contact_name, emergency_contact_phone))
-        conn.commit()
-        conn.close()
-        employee_id = cursor.lastrowid
-        print(employee_id)
-
         
-        flash("Employee added successfully!")
-        return redirect(url_for("hr_services"))
-
+        # Commit and get the generated employee_id
+        conn.commit()
+        employee_id = cursor.lastrowid
+        conn.close()
+        
+        # Return a JSON response with the employee_id
+        return jsonify({"success": True, "employee_id": employee_id})
+    
     return render_template("add_employee.html")
+
 
 @app.route('/leave_request', methods=['GET', 'POST'])
 def leave_request():
