@@ -1,0 +1,80 @@
+{% include 'top.html' %}
+
+<div class="container">
+    <h1 class="mb-4">Add New Employee</h1>
+    <form action="{{ url_for('add_employee') }}" method="POST" data-url="{{ url_for('add_employee') }}">
+        <!-- Personal Information -->
+        <h3>Personal Information</h3>
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" required>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" name="dob" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select class="form-control" id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Contact Information -->
+        <h3>Contact Information</h3>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+        </div>
+
+        <!-- Job Information -->
+        <h3>Job Information</h3>
+        <div class="form-group">
+            <label for="job_title">Job Title</label>
+            <input type="text" class="form-control" id="job_title" name="job_title" required>
+        </div>
+        <div class="form-group">
+            <label for="department">Department</label>
+            <input type="text" class="form-control" id="department" name="department" required>
+        </div>
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="number" class="form-control" id="salary" name="salary" required>
+        </div>
+
+        <!-- Emergency Contact -->
+        <h3>Emergency Contact</h3>
+        <div class="form-group">
+            <label for="emergency_contact_name">Contact Name</label>
+            <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name" required>
+        </div>
+        <div class="form-group">
+            <label for="emergency_contact_phone">Contact Phone</label>
+            <input type="tel" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Add Employee</button>
+    </form>
+
+    
+    <form method="POST" action="{{ url_for('capture_images') }}">
+        <button type="submit">OK</button>
+    </form>
+
+</div>
+
+{% include 'bottom.html' %}

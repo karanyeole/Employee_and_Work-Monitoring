@@ -102,3 +102,60 @@ function logout() {
     document.getElementById("signupDropdown").style.display = "block"; // Show the signup dropdown
     window.location.href = "/"; // Redirect to homepage or login page
 }
+
+
+// Toggle Employee Form
+function toggleEmployeeForm() {
+    const form = document.getElementById("employeeForm");
+    form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+// Add the form toggling function call in initializeHrInfoForm if required
+initializeHrInfoForm();
+
+// Optional: Add feedback on form submission in script.js
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form[data-url]");
+    
+    if (form) {
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const url = form.getAttribute("data-url");
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.employee_id) {
+                    alert("Employee added successfully! Employee ID: " + data.employee_id);
+                } else {
+                    alert(data.error || "An error occurred. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            });
+        });
+    } else {
+        console.error("Form not found.");
+    }
+});
+
+
+
+
+
+
+
+
+

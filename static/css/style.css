@@ -563,3 +563,116 @@ section {
 
 
 /*end hr services*/
+
+/* Adjusting layout for the form */
+.add-employee-form-container {
+    margin-top: 80px; /* Offset for fixed navbar */
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.add-employee-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-control:focus {
+    border-color: #fa7122;
+    box-shadow: 0 0 5px rgba(250, 113, 34, 0.6);
+}
+
+.form-submit-btn {
+    background-color: #fa7122;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form-submit-btn:hover {
+    background-color: #e4661d;
+}
+
+.add-employee-form-container h2 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #333;
+}
+
+.add-employee-form-container .form-group:nth-child(odd) {
+    margin-right: 0px;
+}
+
+@media (max-width: 768px) {
+    .add-employee-form {
+        grid-template-columns: 1fr; /* Stack form fields on smaller screens */
+    }
+
+    .add-employee-form-container {
+        padding: 20px;
+    }
+}
+
+.add-employee-form-container .form-group {
+    margin-bottom: 20px;
+}
+
+.add-employee-form-container .form-group label {
+    color: #333;
+    font-weight: bold;
+}
+
+.add-employee-form-container .form-control {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.add-employee-form-container .form-control:focus {
+    border-color: #fa7122;
+    box-shadow: 0 0 5px rgba(250, 113, 34, 0.6);
+}
+
+.add-employee-form-container .form-submit-btn {
+    background-color: #fa7122;
+    border: none;
+    color: #fff;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.add-employee-form-container .form-submit-btn:hover {
+    background-color: #e4661d;
+}
+
+.add-employee-form-container .form-submit-btn:focus {
+    outline: none;
+}

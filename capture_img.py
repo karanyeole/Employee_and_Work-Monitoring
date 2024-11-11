@@ -1,11 +1,21 @@
-import os
 import cv2
+import os
 import time
-cap = cv2.VideoCapture(0)
-def capture_images(cap, output_folder, num_images=10, name="unknown"):
-    output_folder=os.path.join(output_folder,name)
+
+def capture(name="unknown"):
+    output_folder = "employee_images"
+    num_images = 10  # Make sure it's an integer, not a tuple.
+    
+    # Create folder path
+    output_folder = os.path.join(output_folder, name)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
+
+    # Open the video capture (webcam)
+    cap = cv2.VideoCapture(0)
+    
+    if not cap.isOpened():
+        return "Failed to access the camera"
 
     count = 0
     while count < num_images:
@@ -23,4 +33,4 @@ def capture_images(cap, output_folder, num_images=10, name="unknown"):
     cap.release()
     cv2.destroyAllWindows()
 
-capture_images(cap, r"S:\face detection\person", num_images=10, name="ajay")
+    return "Image insertion done successfully"
