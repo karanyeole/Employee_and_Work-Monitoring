@@ -102,3 +102,24 @@ function logout() {
     document.getElementById("signupDropdown").style.display = "block"; // Show the signup dropdown
     window.location.href = "/"; // Redirect to homepage or login page
 }
+
+
+// Toggle Employee Form
+function toggleEmployeeForm() {
+    const form = document.getElementById("employeeForm");
+    form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+// Add the form toggling function call in initializeHrInfoForm if required
+initializeHrInfoForm();
+
+// Optional: Add feedback on form submission in script.js
+document.addEventListener("DOMContentLoaded", function() {
+    const addEmployeeForm = document.querySelector("form[action='/add_employee']");
+    if (addEmployeeForm) {
+        addEmployeeForm.addEventListener("submit", function(event) {
+            // Add custom handling before the form is submitted, if needed
+            console.log("Submitting new employee data...");
+        });
+    }
+});

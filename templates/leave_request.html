@@ -1,0 +1,44 @@
+{% include 'top.html' %}
+
+<div class="container">
+    <h1 class="text-center mb-4">Leave Request Form</h1>
+    <form action="{{ url_for('leave_request') }}" method="POST">
+        <div class="form-group mb-3">
+            <label for="employee_name">Employee Name</label>
+            <input type="text" class="form-control" id="employee_name" name="employee_name" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="employee_id">Employee ID</label>
+            <input type="text" class="form-control" id="employee_id" name="employee_id" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="leave_type">Type of Leave</label>
+            <select class="form-control" id="leave_type" name="leave_type" required>
+                <option value="sick">Sick Leave</option>
+                <option value="casual">Casual Leave</option>
+                <option value="annual">Annual Leave</option>
+                <option value="maternity">Maternity Leave</option>
+                <option value="paternity">Paternity Leave</option>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label for="start_date">Start Date</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="end_date">End Date</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="reason">Reason for Leave</label>
+            <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+        </div>
+        <div class="form-group mb-3">
+            <label for="contact_info">Emergency Contact Information</label>
+            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Leave Request</button>
+    </form>
+</div>
+
+{% include 'bottom.html' %}

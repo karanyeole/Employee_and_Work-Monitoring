@@ -3,21 +3,21 @@
 <div class="container">
 <h1 class="text-center mb-4">HR Dashboard</h1>
 
-<!-- Total Working Hours Section -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Total Working Hours</h3>
-        <p class="card-text">View detailed working hours for each employee.</p>
-        <a href="#" class="btn btn-primary">View Working Hours</a>
-    </div>
-</section>
-
-<!-- Add New Employee Section -->
-<section class="card">
+ <!-- Add New Employee Section -->
+ <section class="card mb-3">
     <div class="card-body">
         <h3 class="card-title">Add New Employee</h3>
         <p class="card-text">Add new employees to the system with necessary details.</p>
-        <a href="#" class="btn btn-primary">Add Employee</a>
+        <a href="{{ url_for('add_employee') }}" class="btn btn-primary">Add Employee</a>
+    </div>
+</section>
+
+<!-- Leave Requests Section -->
+<section class="card">
+    <div class="card-body">
+        <h3 class="card-title">Leave Requests</h3>
+        <p class="card-text">Apply for leave request.</p>
+        <a href="{{ url_for('leave_request') }}" class="btn btn-primary">Request Leave</a>
     </div>
 </section>
 
@@ -30,14 +30,17 @@
     </div>
 </section>
 
-<!-- Leave Requests Section -->
+
+
+<!-- Total Working Hours Section -->
 <section class="card">
     <div class="card-body">
-        <h3 class="card-title">Leave Requests</h3>
-        <p class="card-text">Review and approve or deny leave requests submitted by employees.</p>
-        <a href="#" class="btn btn-primary">View Leave Requests</a>
+        <h3 class="card-title">Total Working Hours</h3>
+        <p class="card-text">View detailed working hours for each employee.</p>
+        <a href="#" class="btn btn-primary">View Working Hours</a>
     </div>
 </section>
+
 
 <!-- Attendance Insights Section -->
 <section class="card">
