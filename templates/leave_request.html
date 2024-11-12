@@ -1,8 +1,77 @@
 {% include 'top.html' %}
 
-<div class="container">
-    <h1 class="text-center mb-4">Leave Request Form</h1>
-    <form action="{{ url_for('submit_leave_request') }}" method="POST">
+<style>
+    /* Custom container styling for leave request */
+    .leave-request-form-container {
+        max-width: 800px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 40px;
+        margin: 0 auto;
+    }
+
+    /* Headings styling */
+    .leave-request-form-container h1 {
+        font-size: 2.5rem;
+        color: #343a40;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .leave-request-form-container h3 {
+        font-size: 1.5rem;
+        color: #495057;
+        margin-top: 30px;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    /* Form elements styling */
+    .leave-request-form-container .form-group label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .leave-request-form-container .form-control {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .leave-request-form-container .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #80bdff;
+    }
+
+    .leave-request-form-container textarea.form-control {
+        resize: vertical;
+    }
+
+    /* Button styling */
+    .leave-request-form-container .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .leave-request-form-container .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-1px);
+    }
+
+    /* Submit button full-width adjustment */
+    .leave-request-form-container .btn-primary.mt-4 {
+        width: 100%;
+    }
+</style>
+
+<div class="leave-request-form-container" style="padding-top: 80px;">
+    <h1 class="mb-4">Leave Request Form</h1>
+
+    <!-- Leave Request Form -->
+    <form action="{{ url_for('leave_request') }}" method="POST">
         <div class="form-group mb-3">
             <label for="employee_name">Employee Name</label>
             <input type="text" class="form-control" id="employee_name" name="employee_name" required>
@@ -14,6 +83,7 @@
         <div class="form-group mb-3">
             <label for="leave_type">Type of Leave</label>
             <select class="form-control" id="leave_type" name="leave_type" required>
+                <option value="sick">choose...</option>
                 <option value="sick">Sick Leave</option>
                 <option value="casual">Casual Leave</option>
                 <option value="annual">Annual Leave</option>
@@ -37,7 +107,9 @@
             <label for="contact_info">Emergency Contact Information</label>
             <input type="text" class="form-control" id="contact_info" name="contact_info" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Leave Request</button>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary mt-4">Submit Leave Request</button>
     </form>
 </div>
 

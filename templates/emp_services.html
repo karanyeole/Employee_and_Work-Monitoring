@@ -1,50 +1,138 @@
 {% include 'top.html' %}
-<div class="container" style="padding-top: 80px;">
+
+<style>
+    /* Employee Dashboard container styling */
+    .emp_dashboard-container {
+        max-width: 1200px;
+        margin: auto;
+        padding-top: 80px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Header styling with subtle gradient */
+    .emp_dashboard-container h1.text-center {
+        font-size: 2.5rem;
+        color: #004085;
+        font-weight: 700;
+        margin-bottom: 40px;
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    /* Enhanced Card styling */
+    .emp_dashboard-container .card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .emp_dashboard-container .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Card body padding and subtle background */
+    .emp_dashboard-container .card-body {
+        padding: 30px;
+        background: linear-gradient(145deg, #ffffff, #f1f2f6);
+    }
+
+    /* Card title with bold font and color */
+    .emp_dashboard-container .card-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 15px;
+    }
+
+    /* Card text with softer color */
+    .emp_dashboard-container .card-text {
+        font-size: 1rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    /* Enhanced button styling */
+    .emp_dashboard-container .btn-primary {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        border: none;
+        font-size: 1rem;
+        padding: 10px 25px;
+        border-radius: 50px;
+        color: #fff;
+        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .emp_dashboard-container .btn-primary:hover {
+        background: linear-gradient(90deg, #6610f2, #007bff);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container emp_dashboard-container">
     <h1 class="text-center mb-4">Employee Dashboard</h1>
 
-    <!-- My Details Section -->
-    <section class="card">
-        <div class="card-body">
-            <h3 class="card-title">My Details</h3>
-            <p class="card-text">View and update your personal details.</p>
-            <a href="#" class="btn btn-primary">View Details</a>
+    <div class="row">
+        <!-- My Details Section -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">My Details</h3>
+                    <p class="card-text">View and update your personal details.</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <!-- Apply Leave Section -->
-    <section class="card">
-        <div class="card-body">
-            <h3 class="card-title">Apply for Leave</h3>
-            <p class="card-text">Submit a request for leave.</p>
-            <a href="{{ url_for('leave_request') }}" class="btn btn-primary">View Leave Status</a>
+        <!-- Apply Leave Section -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Apply for Leave</h3>
+                    <p class="card-text">Submit a request for leave.</p>
+                    <a href="{{ url_for('leave_request') }}" class="btn btn-primary">Apply</a>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <!-- Leave Status Section -->
-    <section class="card">
-        <div class="card-body">
-            <h3 class="card-title">Leave Status</h3>
-            <p class="card-text">Check the status of your submitted leave requests.</p>
-            <a href="#" class="btn btn-primary">View Leave Status</a>
+        <!-- Leave Status Section -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Leave Status</h3>
+                    <p class="card-text">Check the status of your submitted leave requests.</p>
+                    <a href="#" class="btn btn-primary">View Leave Status</a>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <!-- Attendance Record Section -->
-    <section class="card">
-        <div class="card-body">
-            <h3 class="card-title">Attendance Record</h3>
-            <p class="card-text">View your attendance and punctuality records.</p>
-            <a href="#" class="btn btn-primary">View Attendance</a>
+        <!-- Attendance Record Section -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Attendance Record</h3>
+                    <p class="card-text">View your attendance and punctuality records.</p>
+                    <a href="#" class="btn btn-primary">View Attendance</a>
+                </div>
+            </section>
         </div>
-    </section>
 
-    <!-- Important Notices Section -->
-    <section class="card">
-        <div class="card-body">
-            <h3 class="card-title">Important Notices</h3>
-            <p class="card-text">Stay updated with important notifications and messages.</p>
-            <a href="#" class="btn btn-primary">View Notices</a>
+        <!-- Important Notices Section -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Important Notices</h3>
+                    <p class="card-text">Stay updated with important notifications and messages.</p>
+                    <a href="#" class="btn btn-primary">View Notices</a>
+                </div>
+            </section>
         </div>
-    </section>
+    </div>
 </div>
+
 {% include 'bottom.html' %}
