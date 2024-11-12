@@ -1,10 +1,10 @@
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,Response,jsonify
 import secrets
 import os
 import cv2
 import time
-from capture_img import capture
+from capture_img import capture_image_stream
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -60,8 +60,6 @@ def hr_services():
 @app.route('/emp_services')
 def emp_services():
     return render_template("emp_services.html")
-
-from flask import jsonify, request, render_template, redirect, flash
 
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
@@ -123,20 +121,18 @@ def leave_request():
 
     return render_template("leave_request.html")
 
-@app.route('/capture_images', methods=['POST'])
+@app.route('/capture_images', methods=['POST', 'GET'])
 def capture_images():
-    if request.method == 'POST':
+    if request.method == 'GET':
+        # Example: Fetch the employee name from DB (you can modify the logic)
         conn = sqlite3.connect('employees.db')
         cursor = conn.cursor()
-        # Query to fetch First_name and Last_name where ID is 1
+        employee_id = 1  # Example employee_id, replace with actual logic
         cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
-
-        # Fetch the result
-        r = cursor.fetchone() # Example of how the name might be passed.
-        result = capture(str(r))  # Call the capture_image function with the user's name.
-        flash(result)  # Flash the result to the user
-        return redirect('/hr_services')  # Redirect to the page after the image capture
-    
+        r = cursor.fetchone()
+        
+        # Return a valid response with the image stream
+        return Response(capture_image_stream(str(r)), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 # Route to display the list of employees

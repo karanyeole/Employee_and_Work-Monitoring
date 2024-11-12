@@ -150,6 +150,14 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Form not found.");
     }
 });
+function capImages(){
+    // Display the video container
+    document.getElementById("video-container").style.display = "block";
+
+    // Set the video feed source to the capture_images route (this will start streaming)
+    document.getElementById("video-feed").src = captureImagesUrl;
+}
+
 
 
 

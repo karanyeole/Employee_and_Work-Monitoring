@@ -74,11 +74,18 @@
         <button type="submit" class="btn btn-primary mt-4">Add Employee</button>
     </form>
 
-    <!-- Separate Form for Capture Images Button -->
-    <form method="POST" action="{{ url_for('capture_images') }}" style="margin-top: 20px;">
-        <button type="submit" class="btn btn-secondary">Capture Images</button>
-    </form>
+    <div id="video-container" style="display: none;">
+        <h3>Video Feed:</h3>
+        <img id="video-feed" alt="Video Feed">
+    </div>
 
+    <!-- Separate Form for Capture Images Button -->
+    <button type="button" class="btn btn-secondary" style="margin-top: 20px;"
+        onclick='capImages()'>
+    Capture Images </button>
 </div>
+<script>
+    const captureImagesUrl = "{{ url_for('capture_images') }}";
+</script>
 
 {% include 'bottom.html' %}
