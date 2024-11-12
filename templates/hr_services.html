@@ -1,54 +1,136 @@
 {% include 'top.html' %}
 
-<div class="container">
-<h1 class="text-center mb-4">HR Dashboard</h1>
+<style>
+    /* Dashboard container styling */
+    .dashboard-container {
+        max-width: 900px;
+        margin: auto;
+        padding-top: 80px;
+        font-family: 'Arial', sans-serif;
+    }
 
- <!-- Add New Employee Section -->
- <section class="card mb-3">
-    <div class="card-body">
-        <h3 class="card-title">Add New Employee</h3>
-        <p class="card-text">Add new employees to the system with necessary details.</p>
-        <a href="{{ url_for('add_employee') }}" class="btn btn-primary">Add Employee</a>
+    /* Header styling with subtle gradient */
+    .dashboard-container h1.text-center {
+        font-size: 2.5rem;
+        color: #004085;
+        font-weight: 700;
+        margin-bottom: 40px;
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    /* Enhanced Card styling */
+    .dashboard-container .card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #f8f9fa;
+        overflow: hidden;
+    }
+    .dashboard-container .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Card body padding and subtle background */
+    .dashboard-container .card-body {
+        padding: 30px;
+        background: linear-gradient(145deg, #ffffff, #f1f2f6);
+    }
+    
+    /* Card title with bold font and color */
+    .dashboard-container .card-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 15px;
+    }
+
+    /* Card text with softer color */
+    .dashboard-container .card-text {
+        font-size: 1rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    /* Enhanced button styling */
+    .dashboard-container .btn-primary {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        border: none;
+        font-size: 1rem;
+        padding: 10px 25px;
+        border-radius: 50px;
+        color: #fff;
+        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .dashboard-container .btn-primary:hover {
+        background: linear-gradient(90deg, #6610f2, #007bff);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container dashboard-container">
+    <h1 class="text-center mb-4">HR Dashboard</h1>
+
+    <div class="row">
+        <!-- Add New Employee Section -->
+        <div class="col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Add New Employee</h3>
+                    <p class="card-text">Add new employees to the system with necessary details.</p>
+                    <a href="{{ url_for('add_employee') }}" class="btn btn-primary">Add Employee</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Manage Employee Details -->
+        <div class="col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Employee Details</h3>
+                    <p class="card-text">Edit, view, or delete employee records.</p>
+                    <a href="{{ url_for('manage_employees') }}" class="btn btn-primary">Manage Employees</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Leave Requests Section -->
+        <div class="col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Leave Requests</h3>
+                    <p class="card-text">View applied leave requests.</p>
+                    <a href="#" class="btn btn-primary">Request Leave</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Total Working Hours Section -->
+        <div class="col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Total Working Hours</h3>
+                    <p class="card-text">View detailed working hours for each employee.</p>
+                    <a href="#" class="btn btn-primary">View Working Hours</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Attendance Insights Section -->
+        <div class="col-md-6 mb-4">
+            <section class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Attendance Insights</h3>
+                    <p class="card-text">Analyze employee attendance and punctuality.</p>
+                    <a href="#" class="btn btn-primary">View Attendance Insights</a>
+                </div>
+            </section>
+        </div>
     </div>
-</section>
-
-
-<!-- Manage Employee Details -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Manage Employee Details</h3>
-        <p class="card-text">Edit, view, or delete employee records.</p>
-        <a href="{{ url_for('manage_employees') }}" class="btn btn-primary">Manage Employees</a>
-    </div>
-</section>
-
-<!-- Leave Requests Section -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Leave Requests</h3>
-        <p class="card-text">View applied leave requests.</p>
-        <a href=# class="btn btn-primary">Request Leave</a>
-    </div>
-</section>
-
-
-<!-- Total Working Hours Section -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Total Working Hours</h3>
-        <p class="card-text">View detailed working hours for each employee.</p>
-        <a href="#" class="btn btn-primary">View Working Hours</a>
-    </div>
-</section>
-
-
-<!-- Attendance Insights Section -->
-<section class="card">
-    <div class="card-body">
-        <h3 class="card-title">Attendance Insights</h3>
-        <p class="card-text">Analyze employee attendance and punctuality.</p>
-        <a href="#" class="btn btn-primary">View Attendance Insights</a>
-    </div>
-</section>
 </div>
+
 {% include 'bottom.html' %}
