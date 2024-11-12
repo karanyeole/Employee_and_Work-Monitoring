@@ -17,27 +17,31 @@ def capture_image_stream(name="unknown"):
         return "Failed to access the camera"
 
     count = 0
-    while True:  # This will continuously stream the video
+    while count < num_images:  # Capture only 10 images
         ret, frame = cap.read()
         if not ret:
             break
 
-        # Save image every frame (or at intervals)
-        if count < num_images:
-            img_name = f"{name}_{count}.png"
-            img_path = os.path.join(output_folder, img_name)
-            cv2.imwrite(img_path, frame)  # Save image
-            print(f"Image {count + 1} captured.")
-            count += 1
-            time.sleep(0.5)  # Sleep for a brief period before capturing next frame
+        # Save the image
+        img_name = f"{name}_{count}.png"
+        img_path = os.path.join(output_folder, img_name)
+        cv2.imwrite(img_path, frame)  # Save image
+        print(f"Image {count + 1} captured.")
+        count += 1
+        time.sleep(0.5)  # Brief pause before the next image
 
-        # Encode the frame to JPEG
+        # Encode the frame to JPEG and yield the frame
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
 
-        # Use the multipart/x-mixed-replace content type to send frames
+        # Send the frame to the browser with the current image count
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
     cap.release()
     cv2.destroyAllWindows()
+
+    # Return the final count after capturing the images
+    yield (b'--frame\r\n'
+           b'Content-Type: application/json\r\n\r\n' + str(count).encode() + b'\r\n')
+

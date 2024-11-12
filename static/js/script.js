@@ -150,13 +150,24 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Form not found.");
     }
 });
-function capImages(){
-    // Display the video container
-    document.getElementById("video-container").style.display = "block";
 
-    // Set the video feed source to the capture_images route (this will start streaming)
+function capImages() {
+    document.getElementById("video-container").style.display = "block";
     document.getElementById("video-feed").src = captureImagesUrl;
+
+    // Set up a check to monitor the video feed
+    const videoFeed = document.getElementById("video-feed");
+
+    videoFeed.onload = function() {
+        // Read the count from the feed when it's loaded
+        const currentCount = parseInt(videoFeed.src.split("frame=")[1]); // Extract the count
+        if (currentCount >= 10) {
+            // Hide the video feed after 10 images
+            document.getElementById("video-container").style.display = "none";
+        }
+    };
 }
+
 
 
 

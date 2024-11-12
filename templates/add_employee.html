@@ -2,7 +2,7 @@
 
 <div class="container" style="padding-top: 80px";>
     <h1 class="mb-4">Add New Employee</h1>
-
+    <div id="employee-form">
     <!-- Add Employee Form -->
     <form action="{{ url_for('add_employee') }}" method="POST" data-url="{{ url_for('add_employee') }}">
         <!-- Personal Information -->
@@ -83,6 +83,7 @@
     <button type="button" class="btn btn-secondary" style="margin-top: 20px;"
         onclick='capImages()'>
     Capture Images </button>
+</div>
 </div>
 <script>
     const captureImagesUrl = "{{ url_for('capture_images') }}";
