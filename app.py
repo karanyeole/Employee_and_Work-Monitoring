@@ -117,11 +117,13 @@ def leave_request():
         }
         
         # Process or save `leave_data` as needed
-
+        # For example, saving it to the database or sending email notifications
+        
         flash("Leave request submitted successfully!")
-        return redirect(url_for("emp_services.html"))
+        return redirect(url_for("emp_services"))  # Redirect to a page after successful submission
 
     return render_template("leave_request.html")
+
 
 @app.route('/capture_images', methods=['POST'])
 def capture_images():
@@ -198,6 +200,8 @@ def delete_employee(employee_id):
     conn.close()
     flash("Employee deleted successfully!")
     return redirect(url_for('manage_employees'))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
