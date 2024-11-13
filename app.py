@@ -32,6 +32,7 @@ def init_db():
             emergency_contact_phone TEXT
         )
     ''')
+    
     conn.commit()
     conn.close()
 init_db()
@@ -198,6 +199,37 @@ def delete_employee(employee_id):
     flash("Employee deleted successfully!")
     return redirect(url_for('manage_employees'))
 
+
+@app.route('/employee/<int:employee_id>')
+def view_employee(employee_id):
+    # Connect to the database and fetch employee details
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
+    employee = cursor.fetchone()
+    conn.close()
+    
+    # Check if the employee exists
+    if not employee:
+        return "Employee not found", 404
+
+    # Map the fetched data to relevant fields
+    employee_data = {
+        "first_name": employee[1],
+        "last_name": employee[2],
+        "dob": employee[3],
+        "gender": employee[4],
+        "email": employee[5],
+        "phone": employee[6],
+        "address": employee[7],
+        "job_title": employee[8],
+        "department": employee[9],
+        "salary": employee[10],
+        "emergency_contact_name": employee[11],
+        "emergency_contact_phone": employee[12]
+    }
+
+    return render_template("employee_details.html", employee=employee_data)
 
 
 if __name__ == "__main__":

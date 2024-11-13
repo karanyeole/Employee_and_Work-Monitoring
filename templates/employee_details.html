@@ -1,0 +1,118 @@
+{% include 'top.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <style>
+        /* General Reset for Details Page */
+        .details-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 80px;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .details-heading {
+            font-size: 2em;
+            color: #3a3a3a;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .details-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .details-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .details-card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .details-card-body h3 {
+            font-size: 1.8em;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .details-card-body p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .details-card-body p strong {
+            color: #333;
+            margin-right: 8px;
+        }
+
+        .details-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .details-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .details-card-body h3 {
+                font-size: 1.6em;
+            }
+
+            .details-card-body p {
+                font-size: 1em;
+            }
+
+            .details-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="details-container">
+        <h2 class="details-heading">Employee Details</h2>
+        <div class="details-card">
+            <div class="details-card-body">
+                <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+                <p><strong>Date of Birth:</strong> {{ employee.dob }}</p>
+                <p><strong>Gender:</strong> {{ employee.gender }}</p>
+                <p><strong>Email:</strong> {{ employee.email }}</p>
+                <p><strong>Phone:</strong> {{ employee.phone }}</p>
+                <p><strong>Address:</strong> {{ employee.address }}</p>
+                <p><strong>Job Title:</strong> {{ employee.job_title }}</p>
+                <p><strong>Department:</strong> {{ employee.department }}</p>
+                <p><strong>Salary:</strong> ${{ employee.salary }}</p>
+                <p><strong>Emergency Contact:</strong> {{ employee.emergency_contact_name }} - {{ employee.emergency_contact_phone }}</p>
+                <a href="{{ url_for('emp_services') }}" class="details-btn">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+{% include 'bottom.html' %}

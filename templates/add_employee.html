@@ -157,14 +157,59 @@
         <h3>Video Feed:</h3>
         <img id="video-feed" alt="Video Feed">
     </div>
+    
+    <!-- Capture Images Button -->
+    <button type="button" class="btn btn-secondary" style="margin-top: 20px;" onclick="showInstructions()">
+        Capture Images
+    </button>
+    
+    <!-- Instructions Box (Initially hidden) -->
+    <div id="instructions-box" style="display: none; margin-top: 20px;">
+        <h4>Instructions:</h4>
+        <ul>
+            <li>Ensure your face is clearly visible in the camera.</li>
+            <li>Avoid strong backlighting (bright lights behind you).</li>
+            <li>Keep your face centered in the frame.</li>
+            <li>Stay in a well-lit area but avoid harsh lighting.</li>
+            <li>Video capturing starts in 10 sec.</li>
+        </ul>
+    </div>
+    
 
-    <!-- Separate Form for Capture Images Button -->
-    <button type="button" class="btn btn-secondary" style="margin-top: 20px;"
-        onclick='capImages()'>
-    Capture Images </button>
+
 </div>
 </div>
 <script>
+    // Function to show instructions and start the video feed
+function showInstructions() {
+    // Show the instructions box
+    document.getElementById("instructions-box").style.display = "block";
+    
+    // Delay the start of the camera feed to give time for instructions to be visible
+    setTimeout(function() {
+        // Hide the instructions after 10 seconds (optional)
+        document.getElementById("instructions-box").style.display = "none";
+        
+        // Show the video container (start capturing image)
+        document.getElementById("video-container").style.display = "block";
+        
+        // Call your function to start capturing images (assuming capImages() handles the camera functionality)
+        capImages();
+    }, 5000);  // 5 seconds delay before starting the camera
+}
+
+// Placeholder function to simulate capturing images (your original functionality)
+function capImages() {
+    // Here you can keep your original code for capturing images using the camera
+    console.log("Starting the camera and capturing images...");
+    
+    // For example, you might have code like this to initialize video feed:
+    // const videoFeed = document.getElementById("video-feed");
+    // videoFeed.srcObject = cameraStream; // Example code for setting the video stream
+    
+    // Your code for capturing images can go here...
+}
+
     const captureImagesUrl = "{{ url_for('capture_images') }}";
 </script>
 
