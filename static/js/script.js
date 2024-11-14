@@ -113,7 +113,6 @@ function toggleEmployeeForm() {
 // Add the form toggling function call in initializeHrInfoForm if required
 initializeHrInfoForm();
 
-// Optional: Add feedback on form submission in script.js
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form[data-url]");
     
@@ -128,53 +127,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 method: "POST",
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
+            .then(response => response.json()) // Parse JSON response directly
             .then(data => {
-                if (data.employee_id) {
+                if (data.success) {
                     alert("Employee added successfully! Employee ID: " + data.employee_id);
+                    document.getElementById("employee-form").style.display = "none"; 
+                    document.getElementById("img_cap_data").style.display = "block"; 
+
                 } else {
-                    alert(data.error || "An error occurred. Please try again.");
+                    alert("An error occurred. Please try again.");
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error("Fetch error:", error);
                 alert("An error occurred. Please try again.");
             });
         });
-    } else {
-        console.error("Form not found.");
     }
 });
-
-function capImages() {
-    document.getElementById("video-container").style.display = "block";
-    document.getElementById("video-feed").src = captureImagesUrl;
-
-    // Set up a check to monitor the video feed
-    const videoFeed = document.getElementById("video-feed");
-
-    videoFeed.onload = function() {
-        // Read the count from the feed when it's loaded
-        const currentCount = parseInt(videoFeed.src.split("frame=")[1]); // Extract the count
-        if (currentCount >= 10) {
-            // Hide the video feed after 10 images
-            document.getElementById("video-container").style.display = "none";
-        }
-    };
-}
-
-
-
-
-
-
-
-
-
-
-

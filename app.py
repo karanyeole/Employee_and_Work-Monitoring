@@ -1,10 +1,11 @@
-
 from flask import Flask, render_template, request, redirect, url_for, flash,Response,jsonify
 import secrets
 import os
 import cv2
 import time
-from capture_img import capture_image_stream
+import mediapipe as mp
+from capture_img import capture_image_stream, trainer
+import pickle
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -32,7 +33,6 @@ def init_db():
             emergency_contact_phone TEXT
         )
     ''')
-    
     conn.commit()
     conn.close()
 init_db()
@@ -115,7 +115,7 @@ def leave_request():
             "contact_info": request.form.get("contact_info")
         }
         
-        # Process or save `leave_data` as needed
+        # Process or save leave_data as needed
         # For example, saving it to the database or sending email notifications
         
         flash("Leave request submitted successfully!")
@@ -131,12 +131,11 @@ def capture_images():
         # Example: Fetch the employee name from DB (you can modify the logic)
         conn = sqlite3.connect('employees.db')
         cursor = conn.cursor()
-        employee_id = 1  # Example employee_id, replace with actual logic
         cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
         r = cursor.fetchone()
-        
+        r=r[0]+r[1]
         # Return a valid response with the image stream
-        return Response(capture_image_stream(str(r)), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(capture_image_stream(r), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 # Route to display the list of employees
@@ -199,37 +198,37 @@ def delete_employee(employee_id):
     flash("Employee deleted successfully!")
     return redirect(url_for('manage_employees'))
 
-
-@app.route('/employee/<int:employee_id>')
-def view_employee(employee_id):
-    # Connect to the database and fetch employee details
+@app.route("/training", methods=['POST'])
+def training():
+    global employee_id
+    print(employee_id)
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
-    employee = cursor.fetchone()
+
+    # Fetch the employee's first and last name from the database
+    cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
+    result = cursor.fetchone()
+    if not result:
+        return jsonify({"error": "Employee not found"}), 404
+    
+    # Combine first and last names
+    r = result[0] + result[1]
+    
+    # Assuming trainer function is defined and returns two lists
+    known_faces, known_namers = trainer(r)
+    print("here")
+    with open(os.path.join("employee_images", f"{r}.pkl"), "wb") as f:
+        pickle.dump((known_faces, known_namers), f)
+    
+    # Close the database connection
     conn.close()
     
-    # Check if the employee exists
-    if not employee:
-        return "Employee not found", 404
+    return jsonify({"message": "Training completed successfully!"}), 200
 
-    # Map the fetched data to relevant fields
-    employee_data = {
-        "first_name": employee[1],
-        "last_name": employee[2],
-        "dob": employee[3],
-        "gender": employee[4],
-        "email": employee[5],
-        "phone": employee[6],
-        "address": employee[7],
-        "job_title": employee[8],
-        "department": employee[9],
-        "salary": employee[10],
-        "emergency_contact_name": employee[11],
-        "emergency_contact_phone": employee[12]
-    }
 
-    return render_template("employee_details.html", employee=employee_data)
+
+
+
 
 
 if __name__ == "__main__":

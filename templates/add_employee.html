@@ -1,87 +1,8 @@
 {% include 'top.html' %}
 
-
-<style>
-    /* Custom container styling */
-    .add-employee-form-container {
-        max-width: 800px;
-        background-color: #ffffff;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 40px;
-        margin: 0 auto;
-    }
-
-    /* Headings styling */
-    .add-employee-form-container h1 {
-        font-size: 2.5rem;
-        color: #343a40;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .add-employee-form-container h3 {
-        font-size: 1.5rem;
-        color: #495057;
-        margin-top: 30px;
-        border-bottom: 2px solid #dee2e6;
-        padding-bottom: 10px;
-    }
-
-    /* Form elements styling */
-    .add-employee-form-container .form-group label {
-        font-weight: 600;
-        color: #495057;
-    }
-
-    .add-employee-form-container .form-control {
-        background-color: #f8f9fa;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .add-employee-form-container .form-control:focus {
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        border-color: #80bdff;
-    }
-
-    .add-employee-form-container textarea.form-control {
-        resize: vertical;
-    }
-
-    /* Button styling */
-    .add-employee-form-container .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .add-employee-form-container .btn-primary:hover {
-        background-color: #0056b3;
-        transform: translateY(-1px);
-    }
-
-    .add-employee-form-container .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .add-employee-form-container .btn-secondary:hover {
-        background-color: #565e64;
-        transform: translateY(-1px);
-    }
-
-    /* Submit button full-width adjustment */
-    .add-employee-form-container .btn-primary.mt-4 {
-        width: 100%;
-    }
-</style>
-
 <div class="add-employee-form-container" style="padding-top: 80px";>
-    <h1 class="mb-4">Add New Employee</h1>
     <div id="employee-form">
+        <h1 class="mb-4">Add New Employee</h1>
     <!-- Add Employee Form -->
     <form action="{{ url_for('add_employee') }}" method="POST" data-url="{{ url_for('add_employee') }}">
         <!-- Personal Information -->
@@ -152,65 +73,74 @@
         <!-- Submit Button for Adding Employee -->
         <button type="submit" class="btn btn-primary mt-4">Add Employee</button>
     </form>
-
-    <div id="video-container" style="display: none;">
-        <h3>Video Feed:</h3>
-        <img id="video-feed" alt="Video Feed">
-    </div>
-    
-    <!-- Capture Images Button -->
-    <button type="button" class="btn btn-secondary" style="margin-top: 20px;" onclick="showInstructions()">
-        Capture Images
-    </button>
-    
-    <!-- Instructions Box (Initially hidden) -->
-    <div id="instructions-box" style="display: none; margin-top: 20px;">
-        <h4>Instructions:</h4>
-        <ul>
-            <li>Ensure your face is clearly visible in the camera.</li>
-            <li>Avoid strong backlighting (bright lights behind you).</li>
-            <li>Keep your face centered in the frame.</li>
-            <li>Stay in a well-lit area but avoid harsh lighting.</li>
-            <li>Video capturing starts in 10 sec.</li>
-        </ul>
-    </div>
-    
-
-
 </div>
+
+
+<div id="video-container" style="display: none;">
+    <img id="video-feed" alt="Video Feed">
+</div>
+
+<!-- Separate Form for Capture Images Button -->
+ <div id="img_cap_data" style="display: none;">
+    <h1>add instructions here</h1>
+    <button type="button" id="img_cap" class="btn btn-secondary" onclick='capImages()'>
+        Capture Images </button>
+ </div>
+ <div id="trainer" style="display:none;">
+    <button id="startTrainingButton">Start Training</button>
+    
+        <!-- Loading message -->
+        <div id="loadingMessage" style="display:none;">Please wait, training is in progress...</div>
+    
+        <!-- This will be replaced once training is completed -->
+        <div id="result"></div>
+ </div>
 </div>
 <script>
-    // Function to show instructions and start the video feed
-function showInstructions() {
-    // Show the instructions box
-    document.getElementById("instructions-box").style.display = "block";
-    
-    // Delay the start of the camera feed to give time for instructions to be visible
-    setTimeout(function() {
-        // Hide the instructions after 10 seconds (optional)
-        document.getElementById("instructions-box").style.display = "none";
-        
-        // Show the video container (start capturing image)
-        document.getElementById("video-container").style.display = "block";
-        
-        // Call your function to start capturing images (assuming capImages() handles the camera functionality)
-        capImages();
-    }, 5000);  // 5 seconds delay before starting the camera
-}
-
-// Placeholder function to simulate capturing images (your original functionality)
-function capImages() {
-    // Here you can keep your original code for capturing images using the camera
-    console.log("Starting the camera and capturing images...");
-    
-    // For example, you might have code like this to initialize video feed:
-    // const videoFeed = document.getElementById("video-feed");
-    // videoFeed.srcObject = cameraStream; // Example code for setting the video stream
-    
-    // Your code for capturing images can go here...
-}
-
     const captureImagesUrl = "{{ url_for('capture_images') }}";
+    
+    function capImages() {
+        // Check if the video feed is already active
+        const videoFeed = document.getElementById("video-feed");
+        
+        if (videoFeed.src !== captureImagesUrl) { // Only set src if it's not already set
+            document.getElementById("video-container").style.display = "block";
+            document.getElementById("img_cap_data").style.display = "none";
+            document.getElementById("trainer").style.display = "block";
+            videoFeed.src = captureImagesUrl;
+        }
+    }
+    $(document).ready(function() {
+                // When the button is clicked
+                $("#startTrainingButton").click(function() {
+                    // Show loading message
+                    $("#loadingMessage").show();
+    
+                    // Hide the button to prevent multiple clicks
+                    $(this).prop("disabled", true);
+    
+                    // Send AJAX request to start the training
+                    $.ajax({
+                        url: '/training',
+                        method: 'POST',
+                        success: function(response) {
+                            // Hide loading message
+                            $("#loadingMessage").hide();
+    
+                            // Show result (or any message you want)
+                            $("#result").html("Training completed successfully!");
+    
+                            // Enable the button again if needed
+                            $("#startTrainingButton").prop("disabled", false);
+                        },
+                        error: function() {
+                            // Hide loading message and show error
+                            $("#loadingMessage").hide();
+                            $("#result").html("An error occurred during training.");
+                        }
+                    });
+                });
+            });
 </script>
 
 {% include 'bottom.html' %}
