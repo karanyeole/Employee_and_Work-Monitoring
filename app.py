@@ -2,10 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash,Resp
 import secrets
 import os
 import cv2
+import numpy as np
 import time
-import mediapipe as mp
 from capture_img import capture_image_stream, trainer
-import pickle
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -215,10 +214,7 @@ def training():
     r = result[0] + result[1]
     
     # Assuming trainer function is defined and returns two lists
-    known_faces, known_namers = trainer(r)
-    print("here")
-    with open(os.path.join("employee_images", f"{r}.pkl"), "wb") as f:
-        pickle.dump((known_faces, known_namers), f)
+    trainer(r)
     
     # Close the database connection
     conn.close()
