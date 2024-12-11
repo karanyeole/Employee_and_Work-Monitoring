@@ -11,7 +11,44 @@ app.secret_key = secrets.token_hex(16)
 employee_id=None
 
 import sqlite3
+def init_leave_requests_db():
+    # Connect to the SQLite database (it will create the database if it doesn't exist)
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
 
+    # Create a table for storing leave requests if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS leave_requests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        employee_name TEXT NOT NULL,
+        employee_id TEXT NOT NULL,
+        leave_type TEXT NOT NULL,
+        start_date TEXT NOT NULL,
+        end_date TEXT NOT NULL,
+        reason TEXT NOT NULL,
+        contact_info TEXT NOT NULL
+    )
+    ''')
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+# Function to store leave request data into the database
+def store_leave_request(employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
+
+    # Insert the data into the database
+    cursor.execute('''
+    INSERT INTO leave_requests (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
 def init_db():
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
@@ -78,52 +115,29 @@ def add_employee():
         salary = request.form['salary']
         emergency_contact_name = request.form['emergency_contact_name']
         emergency_contact_phone = request.form['emergency_contact_phone']
-        
+
         # Connect to the database
         conn = sqlite3.connect('employees.db')
         cursor = conn.cursor()
-        
+
         # Insert the new employee
         cursor.execute('''
             INSERT INTO employees (
                 first_name, last_name, dob, gender, email, phone, address,
                 job_title, department, salary, emergency_contact_name, emergency_contact_phone
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary, emergency_contact_name, emergency_contact_phone))
-        
+        ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary,
+              emergency_contact_name, emergency_contact_phone))
+
         # Commit and get the generated employee_id
         conn.commit()
         employee_id = cursor.lastrowid
         conn.close()
-        
+
         # Return a JSON response with the employee_id
         return jsonify({"success": True, "employee_id": employee_id})
-    
+
     return render_template("add_employee.html")
-
-
-@app.route('/leave_request', methods=['GET', 'POST'])
-def leave_request():
-    if request.method == 'POST':
-        leave_data = {
-            "employee_name": request.form.get("employee_name"),
-            "employee_id": request.form.get("employee_id"),
-            "leave_type": request.form.get("leave_type"),
-            "start_date": request.form.get("start_date"),
-            "end_date": request.form.get("end_date"),
-            "reason": request.form.get("reason"),
-            "contact_info": request.form.get("contact_info")
-        }
-        
-        # Process or save leave_data as needed
-        # For example, saving it to the database or sending email notifications
-        
-        flash("Leave request submitted successfully!")
-        return redirect(url_for("emp_services"))  # Redirect to a page after successful submission
-
-    return render_template("leave_request.html")
-
-
 @app.route('/capture_images', methods=['POST', 'GET'])
 
 def capture_images():
@@ -137,6 +151,45 @@ def capture_images():
         # Return a valid response with the image stream
         return Response(capture_image_stream(r), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+# Rename the leave_request function for employees
+@app.route('/leave_request', methods=['GET', 'POST'])
+def leave_request():
+    if request.method == 'POST':
+        # Get the form data
+        employee_name = request.form['employee_name']
+        employee_id = request.form['employee_id']
+        leave_type = request.form['leave_type']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        reason = request.form['reason']
+        contact_info = request.form['contact_info']
+
+        # Insert the data into the database
+        conn = sqlite3.connect('leave_requests.db')
+        c = conn.cursor()
+        c.execute('''
+            INSERT INTO leave_requests (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info))
+        conn.commit()
+        conn.close()
+
+        # Redirect to a success page or return a success message
+        return render_template('leave_request_success.html', message="Leave request submitted successfully!")
+
+    return render_template('leave_request.html')
+
+
+# Rename the leave_request function for HR leave requests
+@app.route('/leave_request_hr', methods=['GET', 'POST'])
+def leave_request_hr():
+    if request.method == 'POST':
+        # Handle form submission logic for HR leave request (if needed)
+        # You can save leave data to the database or send email notifications here
+        flash("Leave request submitted successfully!")
+        return redirect(url_for("leave_request_hr"))  # You can redirect to a confirmation page or back to the form
+
+    return render_template("leave_request_hr.html")  # The HR page where leave requests are managed
 
 # Route to display the list of employees
 @app.route('/manage_employees', methods=['GET'])
