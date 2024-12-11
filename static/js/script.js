@@ -62,32 +62,49 @@ function initializeHrInfoForm() {
 
     // Employee form submission logic
     if (empinfo) {
-        empinfo.addEventListener("submit", function(event) {
+        empinfo.addEventListener("submit", async function(event) {
             event.preventDefault();
-
+    
             const email = document.getElementById("existingEmployeeEmail").value;
             const password = document.getElementById("existingEmployeePassword").value;
-
-            if ((email === "ajayhonrao12@gmail.com" || email === "karanyeole@gmail.com") && password === "ajay&karan") {
-                servicesLink.style.display = "none";
-                if (emp_servicesLink) {
-                    emp_servicesLink.style.display = "block"; // Show Employee Services link
+    
+            // Send email and password to the server to validate
+            try {
+                const response = await fetch('/validate_employee', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+    
+                if (data.success) {
+                    // Hide services link and show employee services
+                    servicesLink.style.display = "none";
+                    if (emp_servicesLink) {
+                        emp_servicesLink.style.display = "block";
+                    }
+                    
+                    sessionStorage.setItem("isEmpLoggedIn", "true");
+                    sessionStorage.removeItem("isHrLoggedIn");
+                    
+                    signupItem.style.display = "none";
+                    logoutItem.style.display = "block";
+                    
+                    window.location.href = "/emp_services";
+                } else {
+                    console.log("Invalid email or employee ID");
                 }
-                sessionStorage.setItem("isEmpLoggedIn", "true"); // Store Employee login status
-                sessionStorage.removeItem("isHrLoggedIn"); // Remove HR login status if set
-
-                // Hide Signup and show Logout button
-                signupItem.style.display = "none"; // Hide the signup dropdown
-                logoutItem.style.display = "block"; // Show the logout button
-
-                window.location.href = "/emp_services";
-            } else {
-                console.log("Sorry, wrong password");
+            } catch (error) {
+                console.error("Error:", error);
             }
         });
     } else {
         console.error("'empinfo' form not found.");
     }
+    
 }
 
 document.addEventListener("DOMContentLoaded", function() {

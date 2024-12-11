@@ -4,7 +4,7 @@ import os
 import cv2
 import numpy as np
 import time
-from capture_img import capture_image_stream, trainer
+from capture_img import capture_image_stream, create_face_database
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -60,6 +60,7 @@ def hr_services():
 @app.route('/emp_services')
 def emp_services():
     return render_template("emp_services.html")
+
 
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
@@ -212,9 +213,9 @@ def training():
     
     # Combine first and last names
     r = result[0] + result[1]
-    
+    print(r)
     # Assuming trainer function is defined and returns two lists
-    trainer(r)
+    create_face_database(r)
     
     # Close the database connection
     conn.close()
@@ -222,6 +223,57 @@ def training():
     return jsonify({"message": "Training completed successfully!"}), 200
 
 
+
+@app.route('/employee/<int:employee_id>')
+def view_employee(employee_id):
+    # Connect to the database and fetch employee details
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
+    employee = cursor.fetchone()
+    conn.close()
+    
+    # Check if the employee exists
+    if not employee:
+        return "Employee not found", 404
+
+    # Map the fetched data to relevant fields
+    employee_data = {
+        "first_name": employee[1],
+        "last_name": employee[2],
+        "dob": employee[3],
+        "gender": employee[4],
+        "email": employee[5],
+        "phone": employee[6],
+        "address": employee[7],
+        "job_title": employee[8],
+        "department": employee[9],
+        "salary": employee[10],
+        "emergency_contact_name": employee[11],
+        "emergency_contact_phone": employee[12]
+    }
+
+    return render_template("employee_details.html", employee=employee_data)
+    
+@app.route('/validate_employee', methods=['POST'])
+def validate_employee():
+    data = request.get_json()
+    email = data.get("email")
+    employee_id = data.get("password")  # Assume employee ID is being used as the password
+
+    # Connect to the database
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+
+    # Query to check if the email and employee_id match
+    cursor.execute("SELECT * FROM employees WHERE email = ? AND id = ?", (email, employee_id))
+    employee = cursor.fetchone()
+    conn.close()
+    print(employee)
+    if employee:
+        return jsonify({"success": True})  # Matching record found
+    else:
+        return jsonify({"success": False})  # No matching record
 
 
 

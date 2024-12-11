@@ -5,7 +5,7 @@ import time
 
 def capture_image_stream(name="unknown"):
     output_folder = "employee_images"
-    num_images = 10  # Number of images to capture
+    num_images = 10 # Number of images to capture
 
     # Create folder path
     output_folder = os.path.join(output_folder, name)
@@ -48,14 +48,15 @@ def capture_image_stream(name="unknown"):
            b'Content-Type: application/json\r\n\r\n' + str(count).encode() + b'\r\n')
 
 
-def trainer(namer):
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
-    model_file = 'employee_images/face_model.yml'
+def create_face_database(namer):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    model_folder = 'employee_images'
+    image_folder=os.path.join('employee_images',namer)
     faces = []
     labels = []
-    label = namer # Label for the person (could be any integer)
-    image_folder = os.path.join("employee_images", namer)
+    label = 0  # Label for the person (could be any integer)
+    
     for filename in os.listdir(image_folder):
         if filename.endswith('.jpg') or filename.endswith('.png'):
             image_path = os.path.join(image_folder, filename)
@@ -72,6 +73,7 @@ def trainer(namer):
                 face = gray[y:y+h, x:x+w]
                 faces.append(face)
                 labels.append(label)
+    model_file = os.path.join(model_folder, f"{namer}.yml")
     # Train the recognizer
     recognizer.train(faces, np.array(labels))
     recognizer.save(model_file)  # Save the trained model

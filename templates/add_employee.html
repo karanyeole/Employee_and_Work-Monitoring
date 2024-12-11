@@ -111,36 +111,44 @@
         }
     }
     $(document).ready(function() {
-                // When the button is clicked
-                $("#startTrainingButton").click(function() {
-                    // Show loading message
-                    $("#loadingMessage").show();
-    
-                    // Hide the button to prevent multiple clicks
-                    $(this).prop("disabled", true);
-    
-                    // Send AJAX request to start the training
-                    $.ajax({
-                        url: '/training',
-                        method: 'POST',
-                        success: function(response) {
-                            // Hide loading message
-                            $("#loadingMessage").hide();
-    
-                            // Show result (or any message you want)
-                            $("#result").html("Training completed successfully!");
-    
-                            // Enable the button again if needed
-                            $("#startTrainingButton").prop("disabled", false);
-                        },
-                        error: function() {
-                            // Hide loading message and show error
-                            $("#loadingMessage").hide();
-                            $("#result").html("An error occurred during training.");
-                        }
-                    });
-                });
-            });
+    // When the button is clicked
+    $("#startTrainingButton").click(function() {
+        // Show loading message
+        $("#loadingMessage").show();
+
+        // Hide the button to prevent multiple clicks
+        $(this).prop("disabled", true);
+
+        // Send AJAX request to start the training
+        $.ajax({
+            url: '/training',
+            method: 'POST',
+            success: function(response) {
+                // Hide loading message
+                $("#loadingMessage").hide();
+
+                // Show result (or any message you want)
+                $("#result").html("Training completed successfully!");
+
+                // Add a 3-second delay before redirecting
+                setTimeout(function() {
+                    // Redirect to capture images page
+                    window.location.href = "{{ url_for('hr_services') }}";
+                }, 3000); // 3000 milliseconds = 3 seconds
+
+                // Enable the button again if needed
+                $("#startTrainingButton").prop("disabled", false);
+            },
+            error: function() {
+                // Hide loading message and show error
+                $("#loadingMessage").hide();
+                $("#result").html("An error occurred during training.");
+            }
+        });
+    });
+});
+
+
 </script>
 
 {% include 'bottom.html' %}
