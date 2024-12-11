@@ -1,0 +1,110 @@
+{% include 'top.html' %}
+
+<style>
+    /* Custom container styling for HR Dashboard */
+    .dashboard-container {
+        max-width: 1200px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 40px;
+        margin: 0 auto;
+    }
+
+    /* Headings styling */
+    .dashboard-container h1 {
+        font-size: 2.5rem;
+        color: #343a40;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Table styling */
+    .dashboard-container table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .dashboard-container th, .dashboard-container td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .dashboard-container th {
+        background-color: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .dashboard-container tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Button styling */
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .btn-approve {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-approve:hover {
+        background-color: #218838;
+    }
+
+    .btn-reject {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h1>HR Leave Request Dashboard</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Employee ID</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Contact Info</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row: Repeat dynamically with data -->
+            <tr>
+                <td>John Doe</td>
+                <td>EMP123</td>
+                <td>Casual Leave</td>
+                <td>2024-12-15</td>
+                <td>2024-12-18</td>
+                <td>Family Emergency</td>
+                <td>+1234567890</td>
+                <td>
+                    <button class="btn btn-approve">Approve</button>
+                    <button class="btn btn-reject">Reject</button>
+                </td>
+            </tr>
+            <!-- Additional rows will be dynamically populated here -->
+        </tbody>
+    </table>
+</div>
+
+{% include 'bottom.html' %}

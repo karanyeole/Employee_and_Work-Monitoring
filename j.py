@@ -7,7 +7,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 # Path to the folder where images of the person are stored
-image_folder = r'C:\Users\Ajay\OneDrive\Desktop\html study\my project\Interstellar\Employee_and_Work-Monitoring\employee_images\AjayHonrao'
+image_folder = "employee_images/ROHITKULKARNI"
 model_file = 'face_model.yml'
 
 def create_face_database(image_folder):
