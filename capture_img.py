@@ -1,7 +1,9 @@
 import cv2
 import os
-import numpy as np
 import time
+import pickle
+
+import face_recognition
 
 def capture_image_stream(name="unknown"):
     output_folder = "employee_images"
@@ -49,32 +51,23 @@ def capture_image_stream(name="unknown"):
 
 
 def create_face_database(namer):
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
-    model_folder = 'employee_images'
-    image_folder=os.path.join('employee_images',namer)
-    faces = []
-    labels = []
-    label = 0  # Label for the person (could be any integer)
-    
-    for filename in os.listdir(image_folder):
-        if filename.endswith('.jpg') or filename.endswith('.png'):
-            image_path = os.path.join(image_folder, filename)
-            img = cv2.imread(image_path)
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            
-            # Histogram Equalization for better contrast
-            gray = cv2.equalizeHist(gray)
-            
-            # Detect faces in the image
-            faces_in_image = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-            
-            for (x, y, w, h) in faces_in_image:
-                face = gray[y:y+h, x:x+w]
-                faces.append(face)
-                labels.append(label)
-    model_file = os.path.join(model_folder, f"{namer}.yml")
-    # Train the recognizer
-    recognizer.train(faces, np.array(labels))
-    recognizer.save(model_file)  # Save the trained model
-    print("Model trained and saved.")
+    known_dir = os.path.join('employee_images', namer)
+    pickle_file = os.path.join(known_dir, "known_faces.pkl")
+    known_encodings = []
+    known_namers = []
+    for file in os.listdir(known_dir):
+        file_path = os.path.join(known_dir, file)
+        if os.path.isfile(file_path):  # Check if the path is a file, not a directory
+            img = face_recognition.load_image_file(file_path)
+            # Find face encodings only if at least one face is detected
+            face_encodings = face_recognition.face_encodings(img)
+            if face_encodings:
+                img_enc = face_encodings[0]
+                known_encodings.append(img_enc)
+                known_namers.append(file.split('.')[0])
+            else:
+                pass
+        labels=0
+    with open(pickle_file, 'wb') as f:
+        pickle.dump((known_encodings, known_namers), f)
+    print(f"Known faces saved to '{pickle_file}'")
