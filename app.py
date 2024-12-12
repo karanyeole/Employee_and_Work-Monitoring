@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,Response,jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 import secrets
 import os
 import cv2
@@ -10,11 +10,11 @@ from capture_img import capture_image_stream, create_face_database
 from try1 import load_known_faces, recognize_faces_from_webcam
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-employee_id=None
-is_running=False
-
+employee_id = None
 
 import sqlite3
+
+
 def init_leave_requests_db():
     # Connect to the SQLite database (it will create the database if it doesn't exist)
     conn = sqlite3.connect('leave_requests.db')
@@ -38,6 +38,7 @@ def init_leave_requests_db():
     conn.commit()
     conn.close()
 
+
 # Function to store leave request data into the database
 def store_leave_request(employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info):
     # Connect to the SQLite database
@@ -53,6 +54,8 @@ def store_leave_request(employee_name, employee_id, leave_type, start_date, end_
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
+
+
 def init_db():
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
@@ -75,28 +78,37 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
+
+
 init_db()
+
+
 # Run this function once to initialize the database
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 @app.route('/faq')
 def faq():
     return render_template('faq.html')
+
 
 @app.route('/gallery')
 def gallery():
     return render_template('gallery.html')
 
+
 @app.route('/services')
 def services():
     return render_template('services.html')
 
+
 @app.route('/hr_services')
 def hr_services():
     return render_template("hr_services.html")
+
 
 @app.route('/emp_services')
 def emp_services():
@@ -142,8 +154,9 @@ def add_employee():
         return jsonify({"success": True, "employee_id": employee_id})
 
     return render_template("add_employee.html")
-@app.route('/capture_images', methods=['POST', 'GET'])
 
+
+@app.route('/capture_images', methods=['POST', 'GET'])
 def capture_images():
     if request.method == 'GET':
         # Example: Fetch the employee name from DB (you can modify the logic)
@@ -151,9 +164,10 @@ def capture_images():
         cursor = conn.cursor()
         cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
         r = cursor.fetchone()
-        r=r[0]+r[1]
+        r = r[0] + r[1]
         # Return a valid response with the image stream
         return Response(capture_image_stream(r), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 # Rename the leave_request function for employees
 @app.route('/leave_request', methods=['GET', 'POST'])
@@ -195,6 +209,7 @@ def leave_request_hr():
 
     return render_template("leave_request_hr.html")  # The HR page where leave requests are managed
 
+
 # Route to display the list of employees
 @app.route('/manage_employees', methods=['GET'])
 def manage_employees():
@@ -204,6 +219,7 @@ def manage_employees():
     employees = cursor.fetchall()
     conn.close()
     return render_template("manage_employees.html", employees=employees)
+
 
 # Route to edit an employee's details
 @app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
@@ -225,18 +241,19 @@ def edit_employee(employee_id):
         salary = request.form['salary']
         emergency_contact_name = request.form['emergency_contact_name']
         emergency_contact_phone = request.form['emergency_contact_phone']
-        
+
         # Update employee in the database
         cursor.execute('''
             UPDATE employees SET first_name=?, last_name=?, dob=?, gender=?, email=?, phone=?, 
             address=?, job_title=?, department=?, salary=?, emergency_contact_name=?, 
             emergency_contact_phone=? WHERE id=?
-        ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary, emergency_contact_name, emergency_contact_phone, employee_id))
+        ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary,
+              emergency_contact_name, emergency_contact_phone, employee_id))
         conn.commit()
         conn.close()
         flash("Employee details updated successfully!")
         return redirect(url_for('manage_employees'))
-    
+
     # Fetch current employee data to populate the form
     cursor.execute("SELECT * FROM employees WHERE id=?", (employee_id,))
     employee = cursor.fetchone()
@@ -255,6 +272,7 @@ def delete_employee(employee_id):
     flash("Employee deleted successfully!")
     return redirect(url_for('manage_employees'))
 
+
 @app.route("/training", methods=['POST'])
 def training():
     global employee_id
@@ -267,18 +285,17 @@ def training():
     result = cursor.fetchone()
     if not result:
         return jsonify({"error": "Employee not found"}), 404
-    
+
     # Combine first and last names
     r = result[0] + result[1]
     print(r)
     # Assuming trainer function is defined and returns two lists
     create_face_database(r)
-    
+
     # Close the database connection
     conn.close()
-    
-    return jsonify({"message": "Training completed successfully!"}), 200
 
+    return jsonify({"message": "Training completed successfully!"}), 200
 
 
 @app.route('/employee/<int:employee_id>')
@@ -289,7 +306,7 @@ def view_employee(employee_id):
     cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
     employee = cursor.fetchone()
     conn.close()
-    
+
     # Check if the employee exists
     if not employee:
         return "Employee not found", 404
@@ -311,7 +328,8 @@ def view_employee(employee_id):
     }
 
     return render_template("employee_details.html", employee=employee_data)
-    
+
+
 @app.route('/validate_employee', methods=['POST'])
 def validate_employee():
     data = request.get_json()
@@ -321,7 +339,6 @@ def validate_employee():
     # Connect to the database
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
-
     # Query to check if the email and employee_id match
     cursor.execute("SELECT * FROM employees WHERE email = ? AND id = ?", (email, employee_id))
     employee = cursor.fetchone()
@@ -332,36 +349,22 @@ def validate_employee():
     else:
         return jsonify({"success": False})  # No matching record
 
-@app.route('/start_work')
-def start_work():
-    return render_template("start_work.html")
 
+# Route to display leave requests
+DATABASE = 'leave_requests.db'
 
-@app.route('/start_it', methods=['POST'])
-def start_it():
-    global is_running, recognition_thread
+def get_db_connection():
+    conn = sqlite3.connect('leave_requests.db')  # Your SQLite database file
+    conn.row_factory = sqlite3.Row  # This allows us to return rows as dictionaries
+    return conn
 
-    if is_running:
-        return jsonify({"status": "Already running"})
-
-    is_running = True
-    known_encodings, known_names = load_known_faces()
-    recognition_thread = threading.Thread(target=recognize_faces_from_webcam, args=(known_encodings, known_names, lambda: is_running))
-    recognition_thread.start()
-
-    return jsonify({"status": "Started"})
-
-@app.route('/end_it', methods=['POST'])
-def end_it():
-    global is_running
-    if not is_running:
-        return jsonify({"status": "Not running"})
-
-    is_running = False
-    return jsonify({"status": "Stopped"})
-
-
-
+# Route to display HR dashboard with leave requests
+@app.route('/dashboard')
+def hr_dashboard():
+    conn = get_db_connection()
+    leave_requests = conn.execute('SELECT * FROM leave_requests').fetchall()  # Ensure this matches your table name
+    conn.close()
+    return render_template('leave_request_hr.html', leave_requests=leave_requests)
 
 if __name__ == "__main__":
     app.run(debug=True)
