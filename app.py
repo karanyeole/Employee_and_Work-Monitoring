@@ -2,13 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for, flash,Resp
 import secrets
 import os
 import cv2
+import pickle
 import numpy as np
+import threading
 import time
 from capture_img import capture_image_stream, create_face_database
-
+from try1 import load_known_faces, recognize_faces_from_webcam
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 employee_id=None
+is_running=False
+
 
 import sqlite3
 def init_leave_requests_db():
@@ -328,6 +332,33 @@ def validate_employee():
     else:
         return jsonify({"success": False})  # No matching record
 
+@app.route('/start_work')
+def start_work():
+    return render_template("start_work.html")
+
+
+@app.route('/start_it', methods=['POST'])
+def start_it():
+    global is_running, recognition_thread
+
+    if is_running:
+        return jsonify({"status": "Already running"})
+
+    is_running = True
+    known_encodings, known_names = load_known_faces()
+    recognition_thread = threading.Thread(target=recognize_faces_from_webcam, args=(known_encodings, known_names, lambda: is_running))
+    recognition_thread.start()
+
+    return jsonify({"status": "Started"})
+
+@app.route('/end_it', methods=['POST'])
+def end_it():
+    global is_running
+    if not is_running:
+        return jsonify({"status": "Not running"})
+
+    is_running = False
+    return jsonify({"status": "Stopped"})
 
 
 

@@ -1,0 +1,31 @@
+{% include 'top.html' %}
+<br><br><br><br>
+
+<h1>Control the Loop</h1>
+    <button onclick="startLoop()">Start</button>
+    <button onclick="stopLoop()">Stop</button>
+
+
+    <script>
+        function startLoop() {
+            fetch('/start_it', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        }
+    
+        function stopLoop() {
+            fetch('/end_it', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+    
+{% include 'bottom.html' %}
