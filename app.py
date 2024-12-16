@@ -76,7 +76,8 @@ def init_db():
             department TEXT,
             salary REAL,
             emergency_contact_name TEXT,
-            emergency_contact_phone TEXT
+            emergency_contact_phone TEXT,
+            Password TEXT
         )
     ''')
     conn.commit()
@@ -84,7 +85,7 @@ def init_db():
 
 
 init_db()
-
+init_leave_requests_db()
 
 # Run this function once to initialize the database
 
@@ -134,6 +135,7 @@ def add_employee():
         salary = request.form['salary']
         emergency_contact_name = request.form['emergency_contact_name']
         emergency_contact_phone = request.form['emergency_contact_phone']
+        password = request.form['password']
 
         # Connect to the database
         conn = sqlite3.connect('employees.db')
@@ -143,10 +145,10 @@ def add_employee():
         cursor.execute('''
             INSERT INTO employees (
                 first_name, last_name, dob, gender, email, phone, address,
-                job_title, department, salary, emergency_contact_name, emergency_contact_phone
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                job_title, department, salary, emergency_contact_name, emergency_contact_phone, password
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
         ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary,
-              emergency_contact_name, emergency_contact_phone))
+              emergency_contact_name, emergency_contact_phone, password))
 
         # Commit and get the generated employee_id
         conn.commit()
@@ -204,13 +206,15 @@ def leave_request():
 # Rename the leave_request function for HR leave requests
 @app.route('/leave_request_hr', methods=['GET', 'POST'])
 def leave_request_hr():
-    if request.method == 'POST':
-        # Handle form submission logic for HR leave request (if needed)
-        # You can save leave data to the database or send email notifications here
-        flash("Leave request submitted successfully!")
-        return redirect(url_for("leave_request_hr"))  # You can redirect to a confirmation page or back to the form
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
+    # For GET request, fetch leave requests from the database
+    cursor.execute("SELECT * FROM leave_requests")
+    leave_requests = cursor.fetchall()
+    conn.close()
 
-    return render_template("leave_request_hr.html")  # The HR page where leave requests are managed
+    return render_template("leave_request_hr.html", leave_requests=leave_requests)
+
 
 
 # Route to display the list of employees
@@ -301,10 +305,11 @@ def training():
     return jsonify({"message": "Training completed successfully!"}), 200
 
 
-@app.route('/employee/<int:employee_id>')
-def view_employee(employee_id):
+@app.route('/employee')
+def view_employee():
     # Connect to the database and fetch employee details
     conn = sqlite3.connect('employees.db')
+    global employee_id
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
     employee = cursor.fetchone()
@@ -335,6 +340,7 @@ def view_employee(employee_id):
 
 @app.route('/validate_employee', methods=['POST'])
 def validate_employee():
+    global employee_id
     data = request.get_json()
     email = data.get("email")
     employee_id = data.get("password")  # Assume employee ID is being used as the password
@@ -343,11 +349,12 @@ def validate_employee():
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
     # Query to check if the email and employee_id match
-    cursor.execute("SELECT * FROM employees WHERE email = ? AND id = ?", (email, employee_id))
+    cursor.execute("SELECT * FROM employees WHERE email = ? AND password = ?", (email, employee_id))
     employee = cursor.fetchone()
     conn.close()
     print(employee)
     if employee:
+        employee_id=employee[0]
         return jsonify({"success": True})  # Matching record found
     else:
         return jsonify({"success": False})  # No matching record

@@ -3,12 +3,6 @@
 <div class="container" style="padding-top: 80px;">
     <h1 class="text-center mb-4">HR Leave Request Dashboard</h1>
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="alert alert-{{ messages[0]|lower }}">{{ messages[0] }}</div>
-    {% endif %}
-    {% endwith %}
-
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -26,16 +20,15 @@
         <tbody>
             {% for request in leave_requests %}
             <tr>
-                <td>{{ request.id }}</td>
-                <td>{{ request.employee_name }}</td>
-                <td>{{ request.employee_id }}</td>
-                <td>{{ request.leave_type }}</td>
-                <td>{{ request.start_date }}</td>
-                <td>{{ request.end_date }}</td>
-                <td>{{ request.reason }}</td>
-                <td>{{ request.contact_info }}</td>
+                <td>{{ request[0] }}</td>
+                <td>{{ request[1] }}</td>
+                <td>{{ request[2] }}</td>
+                <td>{{ request[3] }}</td>
+                <td>{{ request[4] }}</td>
+                <td>{{ request[5] }}</td>
+                <td>{{ request[6] }}</td>
+                <td>{{ request[7] }}</td>
                 <td>
-                    <!-- Add any actions here, e.g. Approve/Reject buttons -->
                     <button class="btn btn-success">Approve</button>
                     <button class="btn btn-danger">Reject</button>
                 </td>
@@ -43,9 +36,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-
-
 </div>
 
 {% include 'bottom.html' %}
