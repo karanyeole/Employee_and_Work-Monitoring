@@ -33,7 +33,8 @@ def init_leave_requests_db():
         start_date TEXT NOT NULL,
         end_date TEXT NOT NULL,
         reason TEXT NOT NULL,
-        contact_info TEXT NOT NULL
+        contact_info TEXT NOT NULL,
+        status BOOLEAN
     )
     ''')
 
@@ -179,21 +180,24 @@ def capture_images():
 def leave_request():
     if request.method == 'POST':
         # Get the form data
-        employee_name = request.form['employee_name']
-        employee_id = request.form['employee_id']
         leave_type = request.form['leave_type']
         start_date = request.form['start_date']
         end_date = request.form['end_date']
         reason = request.form['reason']
-        contact_info = request.form['contact_info']
-
+        conn = sqlite3.connect('employees.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM employees WHERE id = ?", (employee_id,))
+        employees = cursor.fetchone()
+        employee_name=employees[1]+employees[2]
+        contact_info=employees[6]
         # Insert the data into the database
+
         conn = sqlite3.connect('leave_requests.db')
         c = conn.cursor()
         c.execute('''
-            INSERT INTO leave_requests (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info))
+            INSERT INTO leave_requests (employee_name, employee_id, leave_type, start_date, end_date, reason, contact_info,status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (employee_name, employee_id, leave_type, start_date, end_date, reason,contact_info, False,))
         conn.commit()
         conn.close()
 
@@ -367,13 +371,21 @@ def start_work():
 @app.route('/start_it', methods=['POST'])
 def start_it():
     global is_running, recognition_thread
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT first_name, last_name FROM employees WHERE id = ?", (employee_id,))
+    employees = cursor.fetchone()
+    employee=employees[0]+employees[1]
+    employee = os.path.join("employee_images",employee)
+    conn.close()
 
     if is_running:
         return jsonify({"status": "Already running"})
 
     is_running = True
-    known_encodings, known_names = load_known_faces()
-    recognition_thread = threading.Thread(target=recognize_faces_from_webcam, args=(known_encodings, known_names, lambda: is_running))
+    known_encodings, known_names,k = load_known_faces(employee)
+    k = os.path.join(k,"report.db")
+    recognition_thread = threading.Thread(target=recognize_faces_from_webcam, args=(known_encodings, known_names, lambda: is_running,k))
     recognition_thread.start()
 
     return jsonify({"status": "Started"})

@@ -1,5 +1,6 @@
 import cv2
 import os
+import sqlite3
 import time
 import pickle
 
@@ -71,3 +72,18 @@ def create_face_database(namer):
     with open(pickle_file, 'wb') as f:
         pickle.dump((known_encodings, known_namers), f)
     print(f"Known faces saved to '{pickle_file}'")
+    output = os.path.join(known_dir,"report.db")
+    conn = sqlite3.connect(output)
+    cursor = conn.cursor()
+
+    # Create a table for storing leave requests if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS report (
+        date DATE,
+        from_time TIME,
+        to_time TIME,
+        absent_for INT
+        )
+    ''')
+    conn.commit()
+    conn.close()

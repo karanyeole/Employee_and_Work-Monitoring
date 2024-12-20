@@ -1,17 +1,21 @@
+import sqlite3
 import face_recognition
 import cv2
 import pickle
-import datetime
 import time
-from datetime import timedelta
+import os 
+from datetime import datetime, timedelta
 
-def load_known_faces(pickle_file=r"C:\Users\Ajay\OneDrive\Desktop\Interstellar\Employee_and_Work-Monitoring\employee_images\AjayHonrao\known_faces.pkl"):
+
+def load_known_faces(pickle_file):
+    k=pickle_file
+    pickle_file=os.path.join(pickle_file,"known_faces.pkl")
     with open(pickle_file, 'rb') as f:
         known_encodings, known_names = pickle.load(f)
-    return known_encodings, known_names
+    return known_encodings, known_names,k
 
-def recognize_faces_from_webcam(known_encodings, known_names, is_running):
-    now = datetime.datetime.now()
+def recognize_faces_from_webcam(known_encodings, known_names, is_running,database_path):
+    now = datetime.now()
     video_capture = cv2.VideoCapture(0)
     reap = False
 
@@ -40,13 +44,15 @@ def recognize_faces_from_webcam(known_encodings, known_names, is_running):
                 last_recognition_time = time.time()
                 face_recognized = True
                 if reap:
-                    now = datetime.datetime.now()
+                    now = datetime.now()
                     reap = False
-                    start_datetime = datetime.datetime.combine(datetime.date.today(), start)
+                    start_datetime = datetime.combine(datetime.now().date(), start)
                     start_datetime -= timedelta(seconds=10)
                     start = start_datetime.time()
                     end = now.time()
-                    print("from", start, "to", end)
+                    absent_duration = (datetime.combine(datetime.now().date(), end) - 
+                                       datetime.combine(datetime.now().date(), start)).seconds
+                    insert_into_database(database_path, now.date(), start, end, absent_duration)
             else:
                 unknown_face_detected = True
 
@@ -58,14 +64,12 @@ def recognize_faces_from_webcam(known_encodings, known_names, is_running):
             last_recognition_time = time.time()
             reap = True
             start = now.time()
-            now = datetime.datetime.now()
-            print(now.time())
+            now = datetime.now()
         elif not face_recognized and time.time() - last_recognition_time > recognition_timeout:
             last_recognition_time = time.time()
             reap = True
             start = now.time()
-            now = datetime.datetime.now()
-            print(now.time())
+            now = datetime.now()
 
         cv2.imshow('Face Recognition', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -73,3 +77,20 @@ def recognize_faces_from_webcam(known_encodings, known_names, is_running):
 
     video_capture.release()
     cv2.destroyAllWindows()
+
+def insert_into_database(database_path, date, from_time, to_time, absent_duration):
+    """Insert the recognition data into the SQLite database."""
+    conn = sqlite3.connect(database_path)
+    cursor = conn.cursor()
+    
+    # Convert datetime.time objects to strings
+    from_time_str = from_time.strftime('%H:%M:%S')
+    to_time_str = to_time.strftime('%H:%M:%S')
+    
+    cursor.execute('''
+        INSERT INTO report (date, from_time, to_time, absent_for)
+        VALUES (?, ?, ?, ?)
+    ''', (date, from_time_str, to_time_str, absent_duration))
+    
+    conn.commit()
+    conn.close()
