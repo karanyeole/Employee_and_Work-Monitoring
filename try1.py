@@ -35,7 +35,7 @@ def recognize_faces_from_webcam(known_encodings, known_names, is_running,databas
         unknown_face_detected = False
 
         for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-            matches = face_recognition.compare_faces(known_encodings, face_encoding)
+            matches = face_recognition.compare_faces(known_encodings, face_encoding,tolerance=0.4)
             name = "Unknown"
 
             if True in matches:

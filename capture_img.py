@@ -8,7 +8,7 @@ import face_recognition
 
 def capture_image_stream(name="unknown"):
     output_folder = "employee_images"
-    num_images = 10 # Number of images to capture
+    num_images = 25 # Number of images to capture
 
     # Create folder path
     output_folder = os.path.join(output_folder, name)
