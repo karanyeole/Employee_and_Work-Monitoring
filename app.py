@@ -1,11 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 import secrets
 import os
-import cv2
-import pickle
-import numpy as np
 import threading
-import time
 from capture_img import capture_image_stream, create_face_database
 from try1 import load_known_faces, recognize_faces_from_webcam
 
