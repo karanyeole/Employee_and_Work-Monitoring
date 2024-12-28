@@ -55,8 +55,15 @@
             <input type="text" class="form-control" id="job_title" name="job_title" required>
         </div>
         <div class="form-group">
-            <label for="department">Department</label>
-            <input type="text" class="form-control" id="department" name="department" required>
+            <label for="department">department</label>
+            <select class="form-control" id="department" name="department" required>
+                <option value="HR">Human resources</option>
+                <option value="management">Management</option>
+                <option value="software devlopment">software development</option>
+                <option value="cyber seucrity">cyber security</option>
+                <option value="marketing">marketing</option>
+                <option value="sales">sales</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="salary">Salary</label>
@@ -110,8 +117,8 @@
         if (videoFeed.src !== captureImagesUrl) { // Only set src if it's not already set
             document.getElementById("video-container").style.display = "block";
             document.getElementById("img_cap_data").style.display = "none";
-            document.getElementById("trainer").style.display = "block";
             videoFeed.src = captureImagesUrl;
+            document.getElementById("trainer").style.display = "block";
         }
     }
     $(document).ready(function() {
@@ -151,6 +158,7 @@
         });
     });
 });
+
 
 
 </script>

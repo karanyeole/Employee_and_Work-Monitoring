@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 import secrets
 import os
+from collections import defaultdict
+from datetime import datetime, timedelta
 import threading
+import shutil
 from capture_img import capture_image_stream, create_face_database
 from try1 import load_known_faces, recognize_faces_from_webcam
 
@@ -115,7 +118,6 @@ def hr_services():
 def emp_services():
     return render_template("emp_services.html")
 
-
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
     if request.method == 'POST':
@@ -138,12 +140,30 @@ def add_employee():
         conn = sqlite3.connect('employees.db')
         cursor = conn.cursor()
 
+        # Check if the email already exists
+        cursor.execute("SELECT COUNT(*) FROM employees WHERE email = ?", (email,))
+        email_exists = cursor.fetchone()[0]
+
+
+        if email_exists > 0:
+            conn.close()
+            return jsonify({"success": False, "message": "Email must be unique"})
+        # Check if the email already exists
+
+
+        cursor.execute("SELECT COUNT(*) FROM employees WHERE first_name = ? and last_name=? ", (first_name,last_name,))
+        name = cursor.fetchone()[0]
+
+        if name > 0:
+            conn.close()
+            return jsonify({"success": False, "message": "name already exists, must be unique"})
+
         # Insert the new employee
         cursor.execute('''
             INSERT INTO employees (
                 first_name, last_name, dob, gender, email, phone, address,
                 job_title, department, salary, emergency_contact_name, emergency_contact_phone, password
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (first_name, last_name, dob, gender, email, phone, address, job_title, department, salary,
               emergency_contact_name, emergency_contact_phone, password))
 
@@ -273,11 +293,36 @@ def edit_employee(employee_id):
 def delete_employee(employee_id):
     conn = sqlite3.connect('employees.db')
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM employees WHERE id=?", (employee_id,))
-    conn.commit()
+    cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
+    result = cursor.fetchone()
+    if result:
+        name = result[0] + result[1]
+        employee = os.path.join("employee_images", name)
+        if os.path.exists(employee):
+            try:
+                set_permissions(employee)  # Ensure write permissions
+                shutil.rmtree(employee)
+            except Exception as e:
+                flash(f"Error deleting folder: {str(e)}")
+                return redirect(url_for('manage_employees'))
+        cursor.execute("DELETE FROM employees WHERE id=?", (employee_id,))
+        conn.commit()
+        flash("Employee deleted successfully!")
+    else:
+        flash("Employee not found.")
     conn.close()
-    flash("Employee deleted successfully!")
     return redirect(url_for('manage_employees'))
+
+def set_permissions(folder_path):
+    import stat
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            os.chmod(file_path, stat.S_IWRITE)  # Set write permissions
+        for dir in dirs:
+            dir_path = os.path.join(root, dir)
+            os.chmod(dir_path, stat.S_IWRITE)
+    os.chmod(folder_path, stat.S_IWRITE)
 
 
 @app.route("/training", methods=['POST'])
@@ -410,6 +455,48 @@ def hr_dashboard():
     leave_requests = conn.execute('SELECT * FROM leave_requests').fetchall()  # Ensure this matches your table name
     conn.close()
     return render_template('leave_request_hr.html', leave_requests=leave_requests)
+
+
+@app.route("/work_insights")
+def work_insights():
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, first_name, last_name, email, department FROM employees')
+    employee_list=cursor.fetchall()
+    return render_template('work_insights.html', employee_list=employee_list)
+
+
+
+@app.route('/show_report/<int:employee_id>', methods=['GET', 'POST'])
+def show_report(employee_id):
+    conn = sqlite3.connect('employees.db')
+    cursor = conn.cursor()
+
+    # Fetch the employee's first and last name from the database
+    cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
+    result = cursor.fetchone()
+    name = result[0] + result[1]
+    employee = os.path.join("employee_images", name)
+    employee = os.path.join(employee, "report.db")
+    conn = sqlite3.connect(employee)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM report")
+    data = cursor.fetchall()
+
+    # Group data by date
+    grouped_data = defaultdict(list)
+    for row in data:
+        grouped_data[row[0]].append(row[1:])
+
+    # Determine the selected date (default to current date)
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    selected_date = request.form.get('selected_date', current_date)
+
+    # Filter data for the selected date
+    filtered_data = grouped_data.get(selected_date, [])
+
+    return render_template('show_report.html', grouped_data={selected_date: filtered_data}, current_date=current_date, selected_date=selected_date)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,31 @@
+{% include 'top.html' %}
+
+<div class="container" style="padding-top: 80px;">
+    <h1 class="text-center mb-4">HR Leave Request Dashboard</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Employee name</th>
+                <th>Email</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in employee_list %}
+            <tr>
+                <td>{{ request[0] }}</td>
+                <td>{{ request[1]}} {{ request[2]}}</td>
+                <td>{{ request[3] }}</td>
+                <td>{{ request[4] }}</td>
+                <td>
+                    <a href="{{ url_for('show_report', employee_id=request[0]) }}" class="btn btn-success">Monitor Employee</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% include 'bottom.html' %}

@@ -87,3 +87,10 @@ def create_face_database(namer):
     ''')
     conn.commit()
     conn.close()
+    employee = known_dir
+
+    if os.path.exists(employee):
+        for file_name in os.listdir(employee):
+            file_path = os.path.join(employee, file_name)
+            if os.path.isfile(file_path) and file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+                os.remove(file_path)

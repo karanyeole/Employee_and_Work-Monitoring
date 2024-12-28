@@ -1,0 +1,48 @@
+{% include 'top.html' %}
+
+<div class="container" style="padding-top: 80px;">
+    <h1 class="text-center mb-4">Employee Report</h1>
+
+    <!-- Date Selection Form -->
+    <form method="post" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <label for="selected_date">Select Date:</label>
+                <input type="date" id="selected_date" name="selected_date" class="form-control" value="{{ selected_date }}">
+            </div>
+            <div class="col-md-4 text-center mt-2">
+                <button type="submit" class="btn btn-primary mt-4">Show Details</button>
+            </div>
+        </div>
+    </form>
+    {% set  total_seconds = 0 %}
+<!-- Display Report Details -->
+    {% for date, details in grouped_data.items() %}
+        <h3 class="mt-4">{{ date }}</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Duration (Second)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in details %}
+                <tr>
+                    <td>{{ detail[0] }}</td>
+                    <td>{{ detail[1] }}</td>
+                    <td>{{ detail[2] }}</td>
+                </tr>
+                {% set sum =  total_seconds + detail[2] %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+    {% set hours = total_seconds // 3600 %}
+    {% set remaining_seconds = total_seconds % 3600 %}
+    {% set minutes = remaining_seconds // 60 %}
+    {% set seconds = remaining_seconds % 60 %}
+</div>
+
+{% include 'bottom.html' %}
