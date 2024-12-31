@@ -229,7 +229,7 @@ def leave_request_hr():
     conn = sqlite3.connect('leave_requests.db')
     cursor = conn.cursor()
     # For GET request, fetch leave requests from the database
-    cursor.execute("SELECT * FROM leave_requests")
+    cursor.execute("SELECT * FROM leave_requests where status=0")
     leave_requests = cursor.fetchall()
     conn.close()
 
@@ -498,5 +498,20 @@ def show_report(employee_id):
     return render_template('show_report.html', grouped_data={selected_date: filtered_data}, current_date=current_date, selected_date=selected_date)
 
 
+@app.route('/approve/<int:employee_id>', methods=['GET', 'POST'])
+def approve(employee_id):
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE leave_requests SET status = ? WHERE employee_id = ?", (1 , employee_id ))
+    cursor.execute("SELECT * FROM leave_requests where status=0")
+    leave_requests = cursor.fetchall()
+    conn.close()
+    return render_template("leave_request_hr.html", leave_requests=leave_requests)
+
+
+
+@app.route('/reject/<int:employee_id>', methods=['GET', 'POST'])
+def reject(employee_id):
+    pass
 if __name__ == "__main__":
     app.run(debug=True)

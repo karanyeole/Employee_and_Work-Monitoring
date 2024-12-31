@@ -29,8 +29,10 @@
                 <td>{{ request[6] }}</td>
                 <td>{{ request[7] }}</td>
                 <td>
-                    <button class="btn btn-success">Approve</button>
-                    <button class="btn btn-danger">Reject</button>
+                    <a href="{{ url_for('approve', employee_id=request[2]) }}" class="btn btn-sm btn-warning">approve</a>
+                        <form action="{{ url_for('reject', employee_id=request[2]) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">reject</button>
+                        </form>
                 </td>
             </tr>
             {% endfor %}

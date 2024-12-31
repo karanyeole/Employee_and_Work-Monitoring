@@ -93,15 +93,26 @@
 
 <!-- Separate Form for Capture Images Button -->
  <div id="img_cap_data" style="display: none;">
-    <h1>add instructions here</h1>
-    <button type="button" id="img_cap" class="btn btn-secondary" onclick='capImages()'>
+    <ul style="list-style-type: disc; margin-top: 10px; padding-left: 20px; font-size: 1em; line-height: 1.5;">
+        <h1>Capturing images</h1>
+        <H3>this data will be utilize for monitoring your performance </H3>
+        <li>Sit properly in front of the camera.</li>
+        <li>Ensure your face is well-lit with proper lighting.</li>
+        <li>Remove any accessories (e.g., hats or sunglasses) that might obscure your face.</li>
+        <li>Keep your face within the camera frame at all times.</li>
+        <li>Your data privacy is ensured, and no data will be misused.</li>
+    </ul>
+    <p>Read instructions carefully before moving forward </p>
+    <button type="button" id="img_cap" class="btn btn-primary mt-4" onclick='capImages()'>
         Capture Images </button>
  </div>
  <div id="trainer" style="display:none;">
-    <button id="startTrainingButton">Start Training</button>
+    <H4>press Start training once images got captured</H4>
+    <br><br><br><br><br>
+    <button id="startTrainingButton" class="btn btn-primary mt-4" >Start Training</button>
     
         <!-- Loading message -->
-        <div id="loadingMessage" style="display:none;">Please wait, training is in progress...</div>
+        <div id="loadingMessage" class="btn btn-primary mt-4" style="display:none;">Please wait, training is in progress...</div>
     
         <!-- This will be replaced once training is completed -->
         <div id="result"></div>
@@ -128,7 +139,7 @@
         $("#loadingMessage").show();
 
         // Hide the button to prevent multiple clicks
-        $(this).prop("disabled", true);
+        $(this).hide();
 
         // Send AJAX request to start the training
         $.ajax({
