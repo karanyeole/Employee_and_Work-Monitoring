@@ -3,6 +3,7 @@ import secrets
 import os
 from collections import defaultdict
 from datetime import datetime, timedelta
+from werkzeug.utils import secure_filename
 import threading
 import shutil
 from capture_img import capture_image_stream, create_face_database
@@ -118,6 +119,7 @@ def hr_services():
 def emp_services():
     return render_template("emp_services.html")
 
+
 @app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
     if request.method == 'POST':
@@ -178,17 +180,27 @@ def add_employee():
     return render_template("add_employee.html")
 
 
-@app.route('/capture_images', methods=['POST', 'GET'])
+@app.route('/capture_images', methods=['POST'])
 def capture_images():
-    if request.method == 'GET':
-        # Example: Fetch the employee name from DB (you can modify the logic)
+    if 'image' not in request.files:
+        return jsonify({"error": "No image file in the request"}), 400
+    image_file = request.files['image']
+    if image_file:
         conn = sqlite3.connect('employees.db')
         cursor = conn.cursor()
         cursor.execute("SELECT First_name, Last_name FROM employees WHERE id = ?", (employee_id,))
         r = cursor.fetchone()
         r = r[0] + r[1]
-        # Return a valid response with the image stream
-        return Response(capture_image_stream(r), mimetype='multipart/x-mixed-replace; boundary=frame')
+        output_folder = os.path.join("employee_images", r)
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = secure_filename(f"image_{timestamp}.png")
+        filepath = os.path.join(output_folder, filename)
+        image_file.save(filepath)
+        return jsonify({"message": f"Image saved as {filename}"}), 200
+
+    return jsonify({"error": "Failed to save image"}), 500
 
 
 # Rename the leave_request function for employees

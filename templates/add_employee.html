@@ -103,75 +103,145 @@
         <li>Your data privacy is ensured, and no data will be misused.</li>
     </ul>
     <p>Read instructions carefully before moving forward </p>
-    <button type="button" id="img_cap" class="btn btn-primary mt-4" onclick='capImages()'>
-        Capture Images </button>
+    <div id="video-container">
+        <video id="live-video" autoplay></video>
+        <button id="capture-button" class="btn btn-primary mt-4">Capture Images</button>
+    </div>
+    <div id="captured-images" style="display: none;">
+        <h3>Captured Images</h3>
+        <div id="images-container"></div>
+    </div>
  </div>
  <div id="trainer" style="display:none;">
     <H4>press Start training once images got captured</H4>
     <br><br><br><br><br>
     <button id="startTrainingButton" class="btn btn-primary mt-4" >Start Training</button>
-    
-        <!-- Loading message -->
-        <div id="loadingMessage" class="btn btn-primary mt-4" style="display:none;">Please wait, training is in progress...</div>
-    
-        <!-- This will be replaced once training is completed -->
-        <div id="result"></div>
+    <div id="result"></div>
+    <div id="video-containers" style="display:none;">
+        <video src="{{ url_for('static', filename='images/video/waiting.mp4') }}" type="video/mp4" style="max-width: 100%; max-height: 300px; object-fit: contain;"></video>
+    </div>
+    <div id="loadingMessage" class="btn btn-primary mt-4" style="display:none;">
+        Please wait, training is in progress...</div>
  </div>
 </div>
 <script>
-    const captureImagesUrl = "{{ url_for('capture_images') }}";
-    
-    function capImages() {
-        // Check if the video feed is already active
-        const videoFeed = document.getElementById("video-feed");
-        
-        if (videoFeed.src !== captureImagesUrl) { // Only set src if it's not already set
-            document.getElementById("video-container").style.display = "block";
-            document.getElementById("img_cap_data").style.display = "none";
-            videoFeed.src = captureImagesUrl;
-            document.getElementById("trainer").style.display = "block";
-        }
+ const videoElement = document.getElementById("live-video");
+const captureButton = document.getElementById("capture-button");
+const imagesContainer = document.getElementById("images-container");
+let cameraStream = null; // To store the camera stream for cleanup
+let captureInterval = null; // To store the interval for auto-capturing
+let imageCount = 0; // Counter for captured images
+const maxImages = 25; // Maximum number of images to capture
+
+async function startCamera() {
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoElement.srcObject = cameraStream;
+    } catch (error) {
+        console.error("Error accessing the camera: ", error);
     }
-    $(document).ready(function() {
-    // When the button is clicked
-    $("#startTrainingButton").click(function() {
-        // Show loading message
-        $("#loadingMessage").show();
+}
 
-        // Hide the button to prevent multiple clicks
-        $(this).hide();
+function stopCamera() {
+    if (cameraStream) {
+        const tracks = cameraStream.getTracks();
+        tracks.forEach((track) => track.stop()); // Stop all tracks to release the camera
+        cameraStream = null;
+    }
+    if (captureInterval) {
+        clearInterval(captureInterval); // Clear the capture interval
+        captureInterval = null;
+    }
 
-        // Send AJAX request to start the training
-        $.ajax({
-            url: '/training',
-            method: 'POST',
-            success: function(response) {
-                // Hide loading message
-                $("#loadingMessage").hide();
+    // Update UI visibility
+    document.getElementById("img_cap_data").style.display = "none";
+    document.getElementById("trainer").style.display = "block";
 
-                // Show result (or any message you want)
-                $("#result").html("Training completed successfully!");
+    console.log("Camera stopped. Captured images:", imageCount);
+}
 
-                // Add a 3-second delay before redirecting
-                setTimeout(function() {
-                    // Redirect to capture images page
-                    window.location.href = "{{ url_for('hr_services') }}";
-                }, 3000); // 3000 milliseconds = 3 seconds
+async function captureFrame() {
+    if (!cameraStream || imageCount >= maxImages) {
+        stopCamera(); // Stop capturing if the max limit is reached
+        return;
+    }
 
-                // Enable the button again if needed
-                $("#startTrainingButton").prop("disabled", false);
-            },
-            error: function() {
-                // Hide loading message and show error
-                $("#loadingMessage").hide();
-                $("#result").html("An error occurred during training.");
-            }
-        });
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    // Display the captured image
+    const imgElement = document.createElement("img");
+    imgElement.src = canvas.toDataURL("image/png");
+    imagesContainer.appendChild(imgElement);
+
+    // Increment image count before async operations
+    imageCount++;
+
+    // Send the image to the backend
+    canvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append("image", blob, `captured_image_${imageCount}.png`);
+
+        fetch("{{ url_for('capture_images') }}", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(`Image ${imageCount} uploaded successfully: `, data))
+            .catch((error) => console.error(`Error uploading image ${imageCount}: `, error));
     });
+}
+
+captureButton.addEventListener("click", async () => {
+    if (!cameraStream) {
+        // Start the camera if not already started
+        await startCamera();
+    }
+
+    // Start capturing frames at a controlled interval
+    if (!captureInterval) {
+        captureInterval = setInterval(() => {
+            if (imageCount < maxImages) {
+                captureFrame();
+            } else {
+                stopCamera(); // Stop capturing if max images are reached
+            }
+        }, 700); // Slightly slower interval for stability
+    }
 });
 
-
+// Stop the camera when leaving the page (optional cleanup)
+window.addEventListener("beforeunload", stopCamera);
+$(document).ready(function () {
+            $("#startTrainingButton").click(function () {
+                $("#startTrainingButton").hide();
+                $("#video-containers").show();
+                $("#loadingMessage").show(); // Show loading message
+                $.ajax({
+                    url: "/training",
+                    type: "POST",
+                    success: function (response) {
+                        $("#loadingMessage").hide();
+                        $("#video-containers").hide();
+                        $("#result").html('<div class="alert alert-success mt-4">' + response.message + '</div>');
+                        setTimeout(function() {
+                        // Redirect to capture images page
+                        window.location.href = "{{ url_for('hr_services') }}";
+                        }, 3000); // 3000 milliseconds = 3 seconds
+                    },
+                    error: function (xhr) {
+                        $("#loadingMessage").hide();
+                        let error = xhr.responseJSON.error || "An error occurred";
+                        $("#result").html('<div class="alert alert-danger mt-4">' + error + '</div>');
+                    }
+                });
+            });
+        });
 
 </script>
+
 
 {% include 'bottom.html' %}
