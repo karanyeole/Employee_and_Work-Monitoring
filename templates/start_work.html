@@ -1,31 +1,129 @@
 {% include 'top.html' %}
 <br><br><br><br>
 
-<h1>Control the Loop</h1>
-    <button onclick="startLoop()">Start</button>
-    <button onclick="stopLoop()">Stop</button>
+<!-- Main content container -->
+<div class="containers">
+    <h1>Control the Loop</h1>
 
+    <!-- Privacy information section -->
+    <div class="privacy-info">
+        <p><strong>Your privacy is important to us!</strong></p>
+        <p>We understand that privacy is a key concern, and we want to assure you that this system is designed to maintain your privacy while ensuring productivity. Your face will be monitored only when you press the "Start" button, and all information is securely processed.</p>
 
-    <script>
-        function startLoop() {
-            fetch('/start_it', { method: 'POST' })
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    return response.json();
-                })
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
-        }
-    
-        function stopLoop() {
-            fetch('/end_it', { method: 'POST' })
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    return response.json();
-                })
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
-    
+        <p><strong>How it works:</strong></p>
+        <ul>
+            <li>When you start the loop, your face will be monitored to track your presence in front of the laptop.</li>
+            <li>If your face is not visible for more than 10 seconds, it's okay. However, if you're not visible for more than this duration, a notification will be sent to your manager to help maintain productivity.</li>
+            <li>This system is meant to help keep track of time and ensure that you are working efficiently.</li>
+        </ul>
+
+        <p>Your <strong>productivity</strong> will be tracked to ensure that you are engaged and contributing effectively. However, we emphasize that we respect your personal space and are committed to protecting your privacy.</p>
+    </div>
+
+    <!-- Buttons to control the loop -->
+    <div class="control-buttons">
+        <button class="btn start-btn" onclick="startLoop()">Start</button>
+        <button class="btn stop-btn" onclick="stopLoop()">Stop</button>
+    </div>
+</div>
+
+<!-- JavaScript to control the loop -->
+<script>
+    function startLoop() {
+        fetch('/start_it', { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function stopLoop() {
+        fetch('/end_it', { method: 'POST' })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+<!-- CSS for styling -->
+<style>
+
+    h1 {
+        font-size: 2.5rem;
+        color: #2a2a2a;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Container */
+    .containers {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Privacy Information */
+    .privacy-info {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: #e8f4fd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .privacy-info p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    .privacy-info ul {
+        list-style-type: disc;
+        margin-left: 20px;
+        color: #555;
+    }
+
+    /* Buttons */
+    .control-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .start-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .start-btn:hover {
+        background-color: #45a049;
+    }
+
+    .stop-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .stop-btn:hover {
+        background-color: #e53935;
+    }
+</style>
+
 {% include 'bottom.html' %}

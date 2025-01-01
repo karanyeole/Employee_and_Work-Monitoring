@@ -460,14 +460,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row  # This allows us to return rows as dictionaries
     return conn
 
-# Route to display HR dashboard with leave requests
-@app.route('/dashboard')
-def hr_dashboard():
-    conn = get_db_connection()
-    leave_requests = conn.execute('SELECT * FROM leave_requests').fetchall()  # Ensure this matches your table name
-    conn.close()
-    return render_template('leave_request_hr.html', leave_requests=leave_requests)
-
 
 @app.route("/work_insights")
 def work_insights():
@@ -514,8 +506,10 @@ def show_report(employee_id):
 def approve(employee_id):
     conn = sqlite3.connect('leave_requests.db')
     cursor = conn.cursor()
-    cursor.execute("UPDATE leave_requests SET status = ? WHERE employee_id = ?", (1 , employee_id ))
+    cursor.execute("UPDATE leave_requests SET status = ? WHERE id = ?", (1 , employee_id ))
+    conn.commit()
     cursor.execute("SELECT * FROM leave_requests where status=0")
+
     leave_requests = cursor.fetchall()
     conn.close()
     return render_template("leave_request_hr.html", leave_requests=leave_requests)
@@ -524,6 +518,24 @@ def approve(employee_id):
 
 @app.route('/reject/<int:employee_id>', methods=['GET', 'POST'])
 def reject(employee_id):
-    pass
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE leave_requests SET status = ? WHERE id = ?", (2 , employee_id ))
+    conn.commit()
+    cursor.execute("SELECT * FROM leave_requests where status=0")
+    leave_requests = cursor.fetchall()
+    conn.close()
+    return render_template("leave_request_hr.html", leave_requests=leave_requests)
+
+@app.route('/leave_request_status', methods=['GET','POST'])
+def leave_request_status():
+    global employee_id
+    conn = sqlite3.connect('leave_requests.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM leave_requests where employee_id=? ",(employee_id,))
+    leave_requests = cursor.fetchall()
+    conn.close()
+    return render_template("leave_request_status.html", leave_requests=leave_requests)
+
 if __name__ == "__main__":
     app.run(debug=True)

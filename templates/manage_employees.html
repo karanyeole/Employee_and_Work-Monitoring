@@ -51,6 +51,11 @@
             </tbody>
         </table>
         {% endif %}
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('hr_services') }}" class="btn btn-primary">Back to Leave Request Form</a>
+        </div>
+        <br>
+        <br>
     {% else %}
         <h1 class="mb-4">Edit Employee Details</h1>
         <form action="{{ url_for('edit_employee', employee_id=employee[0]) }}" method="POST">

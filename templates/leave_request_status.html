@@ -29,20 +29,24 @@
                 <td>{{ request[6] }}</td>
                 <td>{{ request[7] }}</td>
                 <td>
-                    <a href="{{ url_for('approve', employee_id=request[0]) }}" class="btn btn-sm btn-warning">approve</a>
-                        <form action="{{ url_for('reject', employee_id=request[0]) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger">reject</button>
-                        </form>
+                    {% if request[8] == 0 %}
+                    Pending
+                    {% elif request[8] == 1 %}
+                        Accepted
+                    {% else %}
+                        Unknown Status
+                    {% endif %}
+            
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div class="mt-4 text-center">
-        <a href="{{ url_for('hr_services') }}" class="btn btn-primary">Back to Leave Request Form</a>
-    </div>
-    <br>
-    <br>
 </div>
+<div class="mt-4 text-center">
+    <a href="{{ url_for('emp_services') }}" class="btn btn-primary">Back to Leave Request Form</a>
+</div>
+<br>
+<br>
 
 {% include 'bottom.html' %}

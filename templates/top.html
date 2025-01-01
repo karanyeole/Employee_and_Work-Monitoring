@@ -60,59 +60,40 @@
 
 <!-- Modals for Signup -->
 <!-- Employee Signup Modal -->
+<!-- Employee Signup Modal -->
 <div class="modal fade" id="employeeSignupModal" tabindex="-1" aria-labelledby="employeeSignupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="employeeSignupModalLabel">Employee Signup</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
-                  <li class="nav-item" role="presentation">
-                      <a class="nav-link active" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="true">Register as New</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                      <a class="nav-link" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="false">Login</a>
-                  </li>
-              </ul>
-              <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab">
-                      <form>
-                          <div class="mb-3">
-                              <label for="employeeName" class="form-label">Full Name</label>
-                              <input type="text" class="form-control" id="employeeName" required>
-                          </div>
-                          <div class="mb-3">
-                              <label for="employeeEmail" class="form-label">Email</label>
-                              <input type="email" class="form-control" id="employeeEmail" required>
-                          </div>
-                          <div class="mb-3">
-                              <label for="employeePassword" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="employeePassword" required>
-                          </div>
-                          <button type="submit" class="btn btn-primary">Register</button>
-                      </form>
-                  </div>
-                  <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
-                      <form id="empinfo">
-                          <div class="mb-3">
-                              <label for="existingEmployeeEmail" class="form-label">Email</label>
-                              <input type="email" class="form-control" id="existingEmployeeEmail" required>
-                          </div>
-                          <div class="mb-3">
-                              <label for="existingEmployeePassword" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="existingEmployeePassword" required>
-                          </div>
-                          <button type="submit" class="btn btn-secondary">Login</button>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeSignupModalLabel">Employee Signup</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                        <form id="empinfo">
+                            <div class="mb-3">
+                                <label for="existingEmployeeEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="existingEmployeeEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="existingEmployeePassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="existingEmployeePassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
-
+  
 <!-- HR Signup Modal -->
 <!-- HR Signup Modal -->
 <div class="modal fade" id="hrSignupModal" tabindex="-1" aria-labelledby="hrSignupModalLabel" aria-hidden="true">
