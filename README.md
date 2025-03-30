@@ -19,4 +19,4 @@ The **Employee and Work Monitoring System** is a comprehensive solution designed
 ## How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/monitoring-project.git
+   (https://github.com/karanyeole/Employee_and_Work-Monitoring.git)
